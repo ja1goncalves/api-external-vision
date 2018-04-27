@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 //});
 
 
-Route::middleware(['auth:api'])->group(function (){
+Route::middleware(['auth:api'])->group(function ()
+{
     Route::post('/cep', 'CorreiosController@findCep');
+    Route::post('/cnpj', 'ReceitaController@findCnpj');
 });
