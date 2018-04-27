@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateConsultTable extends Migration
+class CreateConsultsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,7 @@ class CreateConsultTable extends Migration
      */
     public function up()
     {
-        Schema::create('consults', function (Blueprint $table)
-        {
+        Schema::create('consults', function (Blueprint $table) {
             $table->increments('id');
             $table->string('protocol');
             $table->string('cpf')->unique();
@@ -36,6 +35,6 @@ class CreateConsultTable extends Migration
      */
     public function down()
     {
-        //Schema::drop('consults');
+       // Schema::drop('consults');
     }
 }

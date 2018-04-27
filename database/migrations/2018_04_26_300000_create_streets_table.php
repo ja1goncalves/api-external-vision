@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCompaniesTable extends Migration
+class CreateStreetsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,23 @@ class CreateCompaniesTable extends Migration
      */
     public function up()
     {
-        Schema::create('companies', function (Blueprint $table) {
+        Schema::create('streets', function (Blueprint $table)
+        {
             $table->increments('id');
-            $table->string('cnpj');
-            $table->string('corporate');
-            $table->string('cnae');
-            $table->string('discription_cnae');
-            $table->string('participation');
-            $table->date('date_entry');
+            $table->string('type_street');
+            $table->string('public_place');
+            $table->string('number');
+            $table->string('complement');
+            $table->string('neighborhood');
+            $table->string('city');
+            $table->string('uf');
+            $table->string('zipcode');
+            $table->string('score');
+
+
             $table->integer('consult_id');
             $table->foreign('consult_id')->references('id')->on('consults');
+
 
             $table->timestamps();
         });
@@ -35,6 +42,6 @@ class CreateCompaniesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('companies');
+        Schema::drop('streets');
     }
 }
