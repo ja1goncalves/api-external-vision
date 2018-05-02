@@ -5,43 +5,39 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Copartner
+ * Class Mother
  * @package App
  */
-class Copartner extends Model
+class Mother extends Model
 {
+    /**
+     * @var string
+     */
+    protected $table = 'mothers';
+
     /**
      * @var array
      */
     protected $fillable =
     [
-        'cpf',
         'name',
-        'companie_id'
+        'cpf',
+        'consult_id'
     ];
+
 
     /**
      * Relationships
      */
 
     /**
-     * Uma socio pode ser apenas associado a uma consulta
+     * Uma mãe pode ter varias pessoa ou consultas
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function consults()
     {
         return $this->belongsTo(Consult::class);
-    }
-
-    /**
-     * Um socio pertence a uma empresa
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function companies()
-    {
-        return $this->belongsTo(Companie::class);
     }
 
     /**
@@ -59,21 +55,19 @@ class Copartner extends Model
      * Método store, chama para gravar no banco de dados
      *
      * @param $result
-     * @param $companieId
+     * @param $consultId
      */
-    public function request($result, $companieId)
+    public function request($result, $consultId)
     {
-        if (isset($result->PF->DADOS->SOCIEDADES->SOCIEDADE->SOCIOS))
+        // Se StdClass Existe Model Mother è disparado e chama método store e grava dados da mother
+        if (isset($result->PF->DADOS->MAE))
         {
-            if ($companieId)
+            $mother = $this->store($result->PF->DADOS->MAE, $consultId);
+            foreach ((array)$result->PF->DADOS->TELEFONES_MOVEIS->TELEFONE as $tel)
             {
-                $copartner = $this->store($result->PF->DADOS->SOCIEDADES->SOCIEDADE->SOCIOS, $companieId);
-                foreach ((array)$result->PF->DADOS->TELEFONES_MOVEIS->TELEFONE as $tel)
+                if($tel != '' || !empty($tel))
                 {
-                    if ($tel != '' || !empty($tel))
-                    {
-                        $copartner->phones()->create(['phone' => $tel]);
-                    }
+                    $mother->phones()->create(['phone' => $tel]);
                 }
             }
         }
@@ -83,28 +77,28 @@ class Copartner extends Model
      * Método store grava no banco de dados seus dados respectivos
      *
      * @param $result
-     * @param $companieId
+     * @param $consultId
      * @return static
      */
-    public function store($result, $companieId)
+    public function store($result, $consultId)
     {
         $arrayList = null;
 
-        if (isset($result->CPF))
-        {
-            $arrayList['cpf'] = $result->CPF;
-        }
         if (isset($result->NOME))
         {
             $arrayList['name'] = $result->NOME;
         }
-        if (isset($result->NOME))
+        if (isset($result->CPF))
         {
-            $arrayList['companie_id'] = $companieId;
+            $arrayList['cpf'] = $result->CPF;
         }
-        if ($copartner = $this->create($arrayList))
+        if (isset($consultId))
         {
-            return $copartner;
+            $arrayList['consult_id'] = $consultId;
+        }
+        if($mother = $this->create($arrayList))
+        {
+            return $mother;
         }
     }
 

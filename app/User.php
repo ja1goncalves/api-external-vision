@@ -2,21 +2,42 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Passport\HasApiTokens;
+use App\AbstractModulesModel;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 
-class User extends Authenticatable
+/**
+ * Class User
+ * @package App
+ */
+class User extends AbstractModulesModel
+    implements \Illuminate\Contracts\Auth\Authenticatable,
+               \Illuminate\Contracts\Auth\Access\Authorizable,
+               \Illuminate\Contracts\Auth\CanResetPassword
 {
-    use HasApiTokens, Notifiable;
+    use Authenticatable, Authorizable, CanResetPassword;
+
+    /**
+     * @return string
+     */
+    public function newApiTokenAttribute()
+    {
+        return bcrypt($this->attributes['email']);
+    }
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password',
+    protected $fillable =
+    [
+        'name',
+        'email',
+        'password',
+        'active',
+        'api_token'
     ];
 
     /**
@@ -24,7 +45,24 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $hidden = [
-        'password', 'remember_token',
+    protected $hidden =
+    [
+        'password',
+        'remember_token'
     ];
+
+
+    /**
+     * Scopes
+     */
+
+
+    /**
+     * Get Attributes
+     */
+
+
+    /**
+     * Set Attributes
+     */
 }
