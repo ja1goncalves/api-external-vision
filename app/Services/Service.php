@@ -220,7 +220,7 @@ class Service
         // Método getMonths verifica se cadastro existe a de menos 6 meses
         // Método getCpf retorna uma consulta do Banco de Dados, se CPF existir
 
-        if ($this->consult->getMonths($cpf))
+        if ($this->getMonths($cpf))
         {
             $consult = $this->formatJson($cpf);
             return $consult;
@@ -678,7 +678,6 @@ class Service
             return $consultId;
         }
     }
-
 
 
 

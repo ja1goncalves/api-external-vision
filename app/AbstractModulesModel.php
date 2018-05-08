@@ -9,7 +9,7 @@
 namespace App;
 
 
-class AbstractModulesModel extends Model
+abstract class AbstractModulesModel  extends Model
 {
     /**
      * Exclusão Lógica

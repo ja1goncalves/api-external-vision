@@ -26,5 +26,5 @@ Route::middleware(['auth:api'])->group(function ()
 
     Route::get('/cpf', 'AssertivaController@index');
 
-    Route::post('/spc', 'SpcControllers@consultCpfOrCnpj');
+    Route::get('/spc', 'SpcControllers@consultCpfOrCnpj');
 });
