@@ -24,7 +24,6 @@ Route::middleware(['auth:api'])->group(function ()
     Route::post('/cep', 'CorreiosController@findCep');
     Route::post('/cnpj', 'ReceitaController@findCnpj');
 
-    Route::get('/cpf', 'AssertivaController@index');
-
     Route::get('/spc', 'SpcControllers@consultCpfOrCnpj');
+    Route::get('/cpf', 'AssertivaController@index');
 });

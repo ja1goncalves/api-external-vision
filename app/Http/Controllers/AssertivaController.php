@@ -7,11 +7,9 @@
  */
 
 namespace App\Http\Controllers;
-use App\Consults;
-use App\Email;
+
 use App\Services\Service;
-use App\Streets;
-use http\Env\Request;
+use Illuminate\Http\Request;
 
 /**
  * Class AssertivaController
@@ -20,22 +18,15 @@ use http\Env\Request;
 class AssertivaController
 {
 
-    /**
-     * AssertivaController constructor.
-     * @param Service $service
-     */
     public function __construct(Service $service)
     {
         $this->service = $service;
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     public function index(Request $request)
     {
-        return $this->service->index($request->get('cpf'));
+        return $this->service->findCpf($request);
     }
 
 
