@@ -6,6 +6,7 @@ namespace App\Services;
 
 
 use GuzzleHttp\Client;
+use Fideloper\Proxy\TrustProxies as Middleware;
 
 /**
  * Class Service
@@ -17,7 +18,7 @@ class Service
     private $client;
 
 
-    public function __construct( Client $client)
+    public function __construct(Client $client)
     {
 
         $this->client = $client;
@@ -63,36 +64,38 @@ class Service
      */
     public function findCpf($request)
     {
-//{{localhost}}/api/cpf?empresa=PSV-TURISMO&usuario=PSV-WS&senha=99694807&cpf=089.677.014-12
+        $url = 'https://api.assertivasolucoes.com.br/api/1.0.0/localize/json/pf?';
 
-        $url='https://api.assertivasolucoes.com.br/api/1.0.0/localize/json/pf?';
-/*
-        $empresa   = $request->get('empresa');
-        $usuario   = $request->get('usuario');
-        $senha     = $request->get('senha');
-        $documento = $request->get('documento');
-*/
+        $cpf = $request->get('cpf');
 
-        $empresa   = 'PSV-TURISMO';
-        $usuario   = 'PSV-WS';
-        $senha     = '99694807';
-        $documento = $request->get('documento');
-        //$documento = '089.677.014-11';
+        $params =
+        [
+            'empresa'     => config("assertiva.credentials.company"),
+            'usuario'      => config("assertiva.credentials.user"),
+            'senha'      => config("assertiva.credentials.password"),
+            'documento'      => $cpf
+        ];
 
-        $urlFin = $url.  'empresa='   .$empresa.
-                         '&usuario='  .$usuario.
-                         '&senha='    .$senha.
-                         '&documento='.$documento;
+        \Log::debug($params);
 
-        \Log::debug($urlFin);
+        $query = 'empresa='    .$params['empresa'].
+                 '&usuario='   .$params['usuario'].
+                 '&senha='     .$params['senha'].
+                 '&documento=' .$params['documento'];
 
-        $res  = $this->client->request('GET',$urlFin );
+        \Log::debug($query);
 
-        \Log::debug($res);
+         $res  = $this->client->request('GET', $url.$query,
+        [
+            'proxy' => 'http://54.207.118.251:6666'
+        ]);
 
-        $data = json_decode( $res->getBody(),true );
+         \Log::debug($res);
+
+        $data = json_decode($res->getBody(),true);
 
         return $data;
+
     }
 
 
