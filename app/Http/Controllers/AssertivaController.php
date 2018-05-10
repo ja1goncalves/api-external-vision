@@ -8,8 +8,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AssertivaCpfRequest;
 use App\Services\Service;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 /**
  * Class AssertivaController
@@ -24,9 +26,20 @@ class AssertivaController
     }
 
 
-    public function index(Request $request)
+    public function findCpf(AssertivaCpfRequest $request)
     {
-        return $this->service->findCpf($request);
+        try {
+
+            $result = $this->service->findCpf($request->get('cpf'));
+
+            return response()->json([
+                'data' => $result
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => true, 'message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+
     }
 
 

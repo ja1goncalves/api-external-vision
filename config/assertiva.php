@@ -1,31 +1,23 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: laisvidoto
- * Date: 09/05/18
- * Time: 11:30
- */
 
+return [
 
-return
-[
     /*
     |--------------------------------------------------------------------------
-    | asertiva credentials
+    | Assertiva
     |--------------------------------------------------------------------------
-    |
-    | Laravel supports both SMTP and PHP's "asertiva" function as drivers for the
-    | sending of e-mail. You may specify which one you're using throughout
-    | your application here. By default, Laravel is setup for SMTP asertiva.
-    |
-    | Supported: "smtp"
-    |
     */
 
-    'credentials' =>
-    [
-        'company'  => env('company' , 'PSV-TURISMO'),
-        'user'     => env('user'    , 'PSV-WS'),
-        'password' => env('password', '99694807'),
-    ]
+    // Parametros necessarios para acesso á api asertiva
+    'credentials' => [
+        'company'  => env('ASSERTIVA_COMPANY' , 'PSV-TURISMO'),
+        'user'     => env('ASSERTIVA_USER'    , 'PSV-WS'),
+        'password' => env('ASSERTIVA_PASSWORD', '99694807'),
+    ],
+
+    'url_cpf' => env('ASSERTIVA_CPF_URL', 'https://api.assertivasolucoes.com.br/api/1.0.0/localize/json/pf'),
+
+    // Url de acesso ao servidor da mangue3
+    'proxy'  => env('ASSERTIVA_PROXY'),
+
 ];
