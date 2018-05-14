@@ -124,7 +124,10 @@ class Service
                 //$json = json_decode("{\"PF\":{\"DADOS\":{\"DATA_NASC\":\"1994-01-08\",\"SIGNO\":\"CAPRICÓRNIO\",\"PROBABILIDADE_OBITO\":0,\"MAE\":{\"NOME\":\"MARIA GISELIA MENDES COUTINHO VASCONCELOS\"},\"IDADE\":24,\"PROTOCOLO\":\"fc093348-4f9b-4275-b9c1-8f73cf912db9\",\"ENDERECOS\":{\"ENDERECO\":{\"BAIRRO\":\"TIMBAUBINHA\",\"CEP\":55870000,\"NUMERO\":52,\"LOGRADOURO\":\"VITAL BRASIL\",\"UF\":\"PE\",\"CIDADE\":\"TIMBAUBA\"}},\"CPF\":7082187416,\"TELEFONES_MOVEIS\":{\"TELEFONE\":[\"\",\"\",\"\",\"\",\"\",\"\",\"\"]},\"SEXO\":\"M\",\"SITUACAO_RECEITA_FEDERAL\":{\"DATACONSULTA\":\"\"},\"NOME\":\"LOURIVALDO JOSE FLAVIO COUTINHO VASCONCELOS\"}}}", true);
 
                $r = $parser->parse($json);
+
                 //Salva no banco
+                $query = $this->searchCpf($r);
+                return $query;
 
                 return $r;
                  //return //resposta banco;
@@ -222,4 +225,34 @@ class Service
         }
     }
 
+
+    /**
+     * Pesquisa o registro na tabela, com o cpf informado pelo parametro
+     *
+     * @param $cpf
+     */
+    public function searchCpf($cpf)
+    {
+
+    }
+
+    /**
+     * Atualiza registro na tabela, com os dados informados pelo json
+     *
+     * @param $cpf
+     */
+    public function updateCpf($cpf)
+    {
+
+    }
+
+    /**
+     * Cria o registro na tabela, com os dados informados pelo json
+     *
+     * @param $cpf
+     */
+    public function createCpf($cpf)
+    {
+
+    }
 }

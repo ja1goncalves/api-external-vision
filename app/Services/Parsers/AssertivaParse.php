@@ -6,6 +6,8 @@ namespace App\Services\Parsers;
 class AssertivaParser
 {
     /**
+     * Tratamento do retorno de telefone
+     *
      * @param $phoneData
      * @param string $type
      * @return array
@@ -33,6 +35,8 @@ class AssertivaParser
     }
 
     /**
+     * Tratamento do retorno de Enderreço
+     *
      * @param $addressesData
      * @param string $type
      * @return array
@@ -41,7 +45,6 @@ class AssertivaParser
 
         $result = [];
 
-        /*
                 if(!empty($addressesData['ENDERECO'])){
 
                     $address = array_filter($addressesData['ENDERECO'], function ($value){
@@ -55,18 +58,17 @@ class AssertivaParser
                     }, $address);
 
                 }
-        */
-
 
         $test = $addressesData['ENDERECO'];
         count($test, COUNT_RECURSIVE);
 
         return $result;
-
     }
 
 
     /**
+     * Tratamento dos dados vindos da API Assertiva e transformando em json.
+     *
      * @param $result
      * @return array|null
      */
@@ -77,11 +79,6 @@ class AssertivaParser
         if(!empty($result['PF']['DADOS'])){
 
             $phones = [];
-            if(!empty($result['PF']['DADOS']['TELEFONES_MOVEIS'])){
-                $phones = array_values($this->parsePhones($result['PF']['DADOS']['TELEFONES_MOVEIS']));
-            }
-
-            $adrees = [];
             if(!empty($result['PF']['DADOS']['TELEFONES_MOVEIS'])){
                 $phones = array_values($this->parsePhones($result['PF']['DADOS']['TELEFONES_MOVEIS']));
             }
@@ -100,6 +97,22 @@ class AssertivaParser
                 'phones'                 => $phones,
             ];
 
+            if(!empty($result['PF']['DADOS']['ENDERECOS']['ENDERECO'])){
+
+               // $person['addresses'] = ['addresses' => $address ];
+
+                $person['addresses'][] = [
+                    'neighborhood'   => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['BAIRRO'] ?? null,
+                    'type_of_street' => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['TIPO_LOGRADOURO'] ?? null,
+                    'complement'     => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['COMPLEMENTO'] ?? null,
+                    'cep'            => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['CEP'] ?? null,
+                    'number'         => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['NUMERO'] ?? null,
+                    'public_place'   => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['LOGRADOURO'] ?? null,
+                    'uf'             => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['UF'] ?? null,
+                    'city'           => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['CIDADE'] ?? null,
+                ];
+            }
+
             if(!empty($result['PF']['DADOS']['MAE'])){
 
                 $phones = [];
@@ -112,25 +125,6 @@ class AssertivaParser
                     'cpf'    => $result['PF']['DADOS']['MAE']['CPF'] ?? null,
                     'phones' => $phones
                 ];
-            }
-
-            if(!empty($result['PF']['DADOS']['ENDERECOS']['ENDERECO'])){
-
-                $person['addresses'] = ['addresses' => $phones ];
-
-                /*
-
-                $person['addresses'][] = [
-                    'neighborhood'   => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['BAIRRO'] ?? null,
-                    'type_of_street' => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['TIPO_LOGRADOURO'] ?? null,
-                    'complement'     => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['COMPLEMENTO'] ?? null,
-                    'cep'            => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['CEP'] ?? null,
-                    'number'         => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['NUMERO'] ?? null,
-                    'public_place'   => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['LOGRADOURO'] ?? null,
-                    'uf'             => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['UF'] ?? null,
-                    'city'           => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['CIDADE'] ?? null,
-                ];
-                */
             }
         }
         return $person;
