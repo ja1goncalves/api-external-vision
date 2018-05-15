@@ -9,9 +9,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AssertivaCpfRequest;
+use GuzzleHttp\Client;
 use App\Services\Service;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class AssertivaController
@@ -19,28 +20,29 @@ use Illuminate\Http\Response;
  */
 class AssertivaController
 {
-
+    /**
+     * AssertivaController constructor.
+     * @param Service $service
+     */
     public function __construct(Service $service)
     {
         $this->service = $service;
     }
 
-
+    /**
+     * @param AssertivaCpfRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function findCpf(AssertivaCpfRequest $request)
     {
-        try {
-
+         try {
             $result = $this->service->findCpf($request->get('cpf'));
 
-            return response()->json([
-                'data' => $result
-            ]);
+            return response()->json(['data' => $result]);
 
         } catch (\Exception $e) {
             return response()->json(['error' => true, 'message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
-
     }
-
-
 }
