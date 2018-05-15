@@ -10,15 +10,16 @@ namespace App\Http\Controllers;
 
 
 use http\Env\Request;
+use App\Services\SpcService;
 
 class SpcControllers
 {
 
     /**
      * SpcControllers constructor.
-     * @param Service $service
+     * @param SpcService $service
      */
-    public function __construct(Service $service)
+    public function __construct(SpcService $service)
     {
         $this->service = $service;
     }
@@ -31,7 +32,7 @@ class SpcControllers
      */
     public function consultCpfOrCnpj(Request $request)
     {
-        return $this->service->consultaSpc($request);
+        return $this->service->consultSpc($request);
     }
 
 

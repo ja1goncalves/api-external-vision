@@ -14,16 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-
-
 Route::middleware(['auth:api'])->group(function ()
 {
-    Route::post('/cep', 'CorreiosController@findCep');
-    Route::post('/cnpj', 'ReceitaController@findCnpj');
-
-    Route::get('/spc', 'SpcControllers@consultCpfOrCnpj');
+    Route::get('/cep/{cep}', 'CorreiosController@findCep');
+    Route::get('/cnpj/{cnpj}', 'ReceitaController@findCnpj');
+    Route::get('/spc/consulta', 'SpcControllers@consultCpfOrCnpj');
     Route::get('/assertiva', 'AssertivaController@findCpf');
 });
