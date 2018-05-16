@@ -32,4 +32,21 @@ class Occupation extends Model
      */
     protected $table = 'occupations';
 
+
+    /**
+     * Relationships
+     */
+
+    /**
+     * Uma pessoa pode ser associado apenas a uma ocupação
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function consults()
+    {
+        return $this->belongsTo(Consult::class);
+    }
+
+
+
 }

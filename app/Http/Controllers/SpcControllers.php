@@ -19,9 +19,9 @@ class SpcControllers
      * SpcControllers constructor.
      * @param SpcService $service
      */
-    public function __construct(SpcService $service)
+    public function __construct(SpcService $spcService)
     {
-        $this->service = $service;
+        $this->spcService = $spcService;
     }
 
     /**
@@ -32,7 +32,7 @@ class SpcControllers
      */
     public function consultCpfOrCnpj(Request $request)
     {
-        return $this->service->consultSpc($request);
+        return $this->spcService->consultSpc($request);
     }
 
 

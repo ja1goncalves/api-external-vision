@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
-class CreatePhonesTable extends Migration
+class CreateApiLogs extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,14 @@ class CreatePhonesTable extends Migration
      */
     public function up()
     {
-        Schema::create('phones', function (Blueprint $table)
-        {
+        Schema::create('api_logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('phone');
-            $table->integer('phoneable_id');
-            $table->string('phoneable_type');
+            $table->string('name')->nullable();
+            $table->string('info')->nullable();
+            $table->string('args')->nullable();
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *
@@ -30,6 +28,6 @@ class CreatePhonesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('phones');
+        Schema::drop('api_logs');
     }
 }

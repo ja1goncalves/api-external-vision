@@ -3,20 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\AppController;
-use App\Services\Service;
+use App\Services\CepService;
 use Illuminate\Http\Request;
 
 class CorreiosController extends AppController
 {
     /**
-     * @var Service
+     * @var CepService
      */
-    protected $service;
+    protected $cepService;
 
-
-    public function __construct(Service $service)
+    /**
+     * CorreiosController constructor.
+     * @param CepService $cepService
+     */
+    public function __construct(CepService $cepService)
     {
-        $this->service = $service;
+        $this->cepService = $cepService;
     }
 
     /**
@@ -26,7 +29,7 @@ class CorreiosController extends AppController
      */
     public function findCep(Request $request)
     {
-        return $this->service->findCep($request->get('cep'));
+        return $this->cepService->findCep($request->get('cep'));
     }
 
 }

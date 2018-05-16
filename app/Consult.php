@@ -34,11 +34,13 @@ class Consult extends Model
     protected $table = 'consults';
 
     /**
-     * Consults constructor.
+     * Consult constructor.
      * @param array $attributes
      * @param Assertiva|null $client
      */
-    public function __construct(array $attributes = array(), Assertiva $client = null) {
+    public function __construct(array $attributes = array(), Assertiva $client = null)
+    {
+        // override your model constructor
         parent::__construct($attributes);
     }
 
@@ -50,9 +52,10 @@ class Consult extends Model
     /**
      * Uma pessoa pode ter apenas uma mãe
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function mothers() {
+    public function mothers()
+    {
         return $this->hasOne(Mother::class);
     }
 
@@ -61,7 +64,8 @@ class Consult extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function streets() {
+    public function streets()
+    {
         return $this->hasMany(Street::class);
     }
 
@@ -70,7 +74,8 @@ class Consult extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function phones() {
+    public function phones()
+    {
         return $this->morphMany(Phone::class, 'phoneable');
     }
 
@@ -79,8 +84,9 @@ class Consult extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function emails() {
-            return $this->hasMany(Email::class);
+    public function emails()
+    {
+        return $this->hasMany(Email::class);
     }
 
     /**
@@ -88,8 +94,9 @@ class Consult extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function occupations() {
-           return $this->hasMany(Occupation::class);
+    public function occupations()
+    {
+        return $this->hasMany(Occupation::class);
     }
 
     /**
@@ -97,7 +104,8 @@ class Consult extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function companies() {
+    public function companies()
+    {
         return $this->hasMany(Companie::class);
     }
 
@@ -106,7 +114,8 @@ class Consult extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function copartners() {
+    public function copartners()
+    {
         return $this->hasMany(Copartner::class);
     }
 
@@ -115,7 +124,8 @@ class Consult extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function vehicles() {
+    public function vehicles()
+    {
         return $this->hasMany(Vehicles::class);
     }
 

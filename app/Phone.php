@@ -11,6 +11,7 @@ namespace App;
 
 class Phone extends Model
 {
+
     /**
      * Validate, filtros.
      *
@@ -29,6 +30,25 @@ class Phone extends Model
      * @var array
      */
     public $array = [];
+
+    /**
+     * @var string
+     */
+    protected $table = 'phones';
+
+    /**
+     * Relationships
+     */
+
+    /**
+     * Relacionamento Polimorfico, Essa entidade pertence a varias entendidades
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function phoneable()
+    {
+        return $this->morphTo();
+    }
 
 
 }

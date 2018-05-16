@@ -34,4 +34,16 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
          'password',
          'remember_token',
      ];
+
+
+     /**
+      * @var string
+      */
+     protected $table = 'users';
+
+
+     public function newApiTokenAttribute()
+     {
+         return bcrypt($this->attributes['email']);
+     }
  }

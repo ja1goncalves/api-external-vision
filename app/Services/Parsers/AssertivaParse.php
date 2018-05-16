@@ -99,8 +99,6 @@ class AssertivaParser
 
             if(!empty($result['PF']['DADOS']['ENDERECOS']['ENDERECO'])){
 
-               // $person['addresses'] = ['addresses' => $address ];
-
                 $person['addresses'][] = [
                     'neighborhood'   => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['BAIRRO'] ?? null,
                     'type_of_street' => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['TIPO_LOGRADOURO'] ?? null,
@@ -127,6 +125,36 @@ class AssertivaParser
                 ];
             }
         }
+
+        if(!empty($result['PF']['DADOS']['VEICULOS']['VEICULO'])){
+
+            $person['vehicles'][] = [
+                'board'              => $result['PF']['DADOS']['VEICULOS']['VEICULO']['PLACA'] ?? null,
+                'brand_model'        => $result['PF']['DADOS']['VEICULOS']['VEICULO']['MARCA_MODELO'] ?? null,
+                'model_year'         => $result['PF']['DADOS']['VEICULOS']['VEICULO']['ANO_MODELO'] ?? null,
+                'manufacturing_year' => $result['PF']['DADOS']['VEICULOS']['VEICULO']['ANO_FABRICACAO'] ?? null,
+            ];
+        }
+
+        if(!empty($result['PF']['DADOS']['EMAILS'])){
+
+            $person['email'][] = [
+                'board' => $result['PF']['DADOS']['EMAILS'] ?? null,
+            ];
+        }
+
+        if(!empty($result['PF']['DADOS']['SOCIEDADES']['SOCIEDADE'])){
+
+            $person['companie'][] = [
+                'cnpj'             => $result['PF']['DADOS']['SOCIEDADES']['SOCIEDADE'] ['CNPJ']?? null,
+                'corporate'        => $result['PF']['DADOS']['SOCIEDADES']['SOCIEDADE'] ['RAZAO_SOCIAL']?? null,
+                'cnae'             => $result['PF']['DADOS']['SOCIEDADES']['SOCIEDADE'] ['CNAE']?? null,
+                'description_cnae' => $result['PF']['DADOS']['SOCIEDADES']['SOCIEDADE'] ['DESCRICAO_CNAE']?? null,
+                'participation'    => $result['PF']['DADOS']['SOCIEDADES']['SOCIEDADE'] ['PARTICIPACAO']?? null,
+                'date_entry'       => $result['PF']['DADOS']['SOCIEDADES']['SOCIEDADE'] ['DATA_ENTRADA']?? null,
+            ];
+        }
+
         return $person;
     }
 }

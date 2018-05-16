@@ -33,4 +33,19 @@ class Vehicles  extends Model
      */
     protected $table = 'vehicles';
 
+
+    /**
+     * Relationships
+     */
+
+    /**
+     * Um veiculo pode ser associado apenas a uma pessoa
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function consults()
+    {
+        return $this->belongsTo(Consult::class);
+    }
+
 }

@@ -34,5 +34,21 @@ class Street  extends Model
         'consult_id'
     ];
 
+    protected $table = 'streets';
+
+    /**
+     * Relationships
+     */
+
+    /**
+     * Um endereço pode ser associado apenas a uma pessoa
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function consults()
+    {
+        return $this->belongsTo(Consult::class);
+    }
+
 
 }

@@ -8,11 +8,8 @@
 
 namespace App\Services;
 
-
 class SpcService
 {
-
-
     /**
      * Retorna quantidade de vezes em que a API Assertiva foi utilizada no mês solicitado.
      *

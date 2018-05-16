@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Services\Parsers\AssertivaParser;
+use App\Services\Parsers\DataParser;
 use GuzzleHttp\Client;
 use Fideloper\Proxy\TrustProxies as Middleware;
 
@@ -25,58 +26,6 @@ class Service
         $this->client = $client;
     }
 
-
-    /**
-     * Busca de Enderreço via cep, api viacep
-     *
-     * @param $cep
-     * @return mixed|\Psr\Http\Message\ResponseInterface
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function findCep($cep)
-    {
-        try{
-            if (empty($cep) or is_null($cep)){
-                throw new \Exception('Cep inválido!');
-            } else {
-                $url = 'https://viacep.com.br/ws/';
-                $cep = preg_replace("/[.\/-]/", '', $cep);
-                $res = $this->client->request('GET', $url.$cep . '/json/');
-                $json = json_decode($res->getBody(), true);
-
-                return $json;
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 401);
-        }
-    }
-
-    /**
-     * Busca de informações de um Cnpj informado, api da receita
-     *
-     * @param $cnpj
-     * @return mixed
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function findCnpj($cnpj)
-    {
-        try{
-            if (empty($cnpj) or is_null($cnpj)){
-                throw new \Exception('Cnpj inválido!');
-            } else{
-                $url = 'https://www.receitaws.com.br/v1/cnpj/';
-                $cnpj = preg_replace("/[.\/-]/", '', $cnpj);
-                $res = $this->client->request('GET', $url . $cnpj);
-                $data = json_decode($res->getBody(), true);
-
-                return $data;
-            }
-        } catch (\Exception $e){
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 401);
-        }
-    }
-
-
     /**
      * Pesquisa de informações pessoais pelo Cpf, api assertiva
      *
@@ -86,7 +35,7 @@ class Service
      */
     public function findCpf($cpf)
     {
-        $parser = new AssertivaParser();
+
         $cpf = $this->formatCpf($cpf);
 
         if (empty($cpf)){
@@ -114,10 +63,20 @@ class Service
             $json = json_decode("{\"PF\":{\"DADOS\":{\"SIGNO\":\"TOURO\",\"PROBABILIDADE_OBITO\":0,\"PROTOCOLO\":\"b843c678-bdd4-4f67-ae2b-0ebf6bea13bf\",\"IDADE\":24,\"MAE\":{\"TELEFONES\":{\"TELEFONE\":[81992589969,81988240540]},\"CPF\":16988221468,\"NOME\":\"EDNA SOARES DE SOUZA\"},\"RENDA_ESTIMADA\":1033.92,\"ENDERECOS\":{\"ENDERECO\":{\"BAIRRO\":\"JARDIM SAO PAULO\",\"TIPO_LOGRADOURO\":\"R\",\"COMPLEMENTO\":\"BL 2 AP 2\",\"CEP\":50790901,\"NUMERO\":355,\"LOGRADOURO\":\"LEANDRO BARRETO\",\"UF\":\"PE\",\"CIDADE\":\"RECIFE\"}},\"TELEFONES_MOVEIS\":{\"TELEFONE\":[81992589969,81988240540,\"\",81981546043,\"\",\"\"]},\"SITUACAO_RECEITA_FEDERAL\":{\"DATACONSULTA\":\"\"},\"NOME\":\"LAIS INGRID SOARES DE SOUZA VIDOTO\",\"FAIXA_RENDA_ESTIMADA\":\"E\",\"DATA_NASC\":\"1994-04-25\",\"VALOR_BENEFICIO\":\"Até 2 SM\",\"CPF\":8967701411,\"SEXO\":\"F\"}}}", true);
             //$json = json_decode("{\"PF\":{\"DADOS\":{\"DATA_NASC\":\"1994-01-08\",\"SIGNO\":\"CAPRICÓRNIO\",\"PROBABILIDADE_OBITO\":0,\"MAE\":{\"NOME\":\"MARIA GISELIA MENDES COUTINHO VASCONCELOS\"},\"IDADE\":24,\"PROTOCOLO\":\"fc093348-4f9b-4275-b9c1-8f73cf912db9\",\"ENDERECOS\":{\"ENDERECO\":{\"BAIRRO\":\"TIMBAUBINHA\",\"CEP\":55870000,\"NUMERO\":52,\"LOGRADOURO\":\"VITAL BRASIL\",\"UF\":\"PE\",\"CIDADE\":\"TIMBAUBA\"}},\"CPF\":7082187416,\"TELEFONES_MOVEIS\":{\"TELEFONE\":[\"\",\"\",\"\",\"\",\"\",\"\",\"\"]},\"SEXO\":\"M\",\"SITUACAO_RECEITA_FEDERAL\":{\"DATACONSULTA\":\"\"},\"NOME\":\"LOURIVALDO JOSE FLAVIO COUTINHO VASCONCELOS\"}}}", true);
 
+            //tratamento json
+            $parser  = new AssertivaParser();
             $parsers = $parser->parse($json);
 
-            //Salva no banco
-           // $query = $this->searchCpf($parsers);
+            //salvando no banco
+            $dataParser  = new DataParser();
+            $dataparsers = $dataParser->searchAlls($parsers);
+
+
+
+
+
+
+
 
             return $parsers;
         }
@@ -210,37 +169,67 @@ class Service
         }
     }
 
-
     /**
-     * Pesquisa o registro na tabela, com o cpf informado pelo parametro
+     * Pegar consulta se CPF existe na base dados
      *
+     * @param $query
      * @param $cpf
+     * @return mixed
      */
-    public function searchCpf($cpf)
+    public function scopeCpf($query, $cpf)
     {
-
+        return $query->where('cpf', $cpf);
     }
 
     /**
-     * Atualiza registro na tabela, com os dados informados pelo json
+     * Pegar consulta se CPF existe na base dados
      *
-     * @param $cpf
+     * @param $data
+     * @return mixed
      */
-    public function updateCpf($cpf)
+    public function getCpf($data)
     {
-
+        $earliestdate = DB::table('consults')
+            ->select('*')
+            ->where(['cpf' => $data])->first();
+        if ($earliestdate) {
+            $data = (object)$earliestdate;
+            return $data;
+        }
     }
 
     /**
-     * Cria o registro na tabela, com os dados informados pelo json
+     * Verifica se dados cadastrados existem a mais de meses e retorna sua entidade
      *
-     * @param $cpf
+     * @param $data
+     * @return mixed
      */
-    public function createCpf($cpf)
+    public function getMonths($data)
     {
-
+        $mostDate = DB::table('consults')
+            ->select('*')
+            ->where('cpf', '=', $data)
+            ->where('updated_at', '>=', new \DateTime('-6 months'))
+            ->first();
+        if ($mostDate) {
+            return $mostDate;
+        } else {
+            return false;
+        }
     }
 
-
+    /**
+     * Verifica se dados cadastrados existem a mais de meses e retorna sua entidade
+     *
+     * @param $query
+     * @param $data
+     * @return mixed
+     */
+    public function scopeMonths($query, $data)
+    {
+        return $query->where('cpf', $data)
+            ->where('updated_at', '>=', new \DateTime('-6 months'))
+            ->first();
+    }
 
 }
