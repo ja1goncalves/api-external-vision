@@ -30,7 +30,8 @@ class Service
      * Service constructor.
      * @param Client $client
      */
-    public function __construct(Client $client, AssertivaParser $assertivaParser,ConsultsParser $consultsParser){
+    public function __construct(Client $client, AssertivaParser $assertivaParser,
+                                ConsultsParser $consultsParser){
         $this->client = $client;
         $this->assertivaParser = $assertivaParser;
         $this->consultsParser = $consultsParser;
@@ -45,7 +46,7 @@ class Service
      */
     public function findCpf($cpf)
     {
-        //acceso á api assertiva
+        //acceso á api assertiva com o seu retorno
         $response = $this->accessAssertiva($cpf);
 
         //exemplos de retorno
@@ -53,15 +54,23 @@ class Service
         $response = json_decode("{\"PF\":{\"DADOS\":{\"DATA_NASC\":\"1994-01-08\",\"SIGNO\":\"CAPRICÓRNIO\",\"PROBABILIDADE_OBITO\":0,\"MAE\":{\"NOME\":\"MARIA GISELIA MENDES COUTINHO VASCONCELOS\"},\"IDADE\":24,\"PROTOCOLO\":\"fc093348-4f9b-4275-b9c1-8f73cf912db9\",\"ENDERECOS\":{\"ENDERECO\":{\"BAIRRO\":\"TIMBAUBINHA\",\"CEP\":55870000,\"NUMERO\":52,\"LOGRADOURO\":\"VITAL BRASIL\",\"UF\":\"PE\",\"CIDADE\":\"TIMBAUBA\"}},\"CPF\":7082187416,\"TELEFONES_MOVEIS\":{\"TELEFONE\":[\"\",\"\",\"\",\"\",\"\",\"\",\"\"]},\"SEXO\":\"M\",\"SITUACAO_RECEITA_FEDERAL\":{\"DATACONSULTA\":\"\"},\"NOME\":\"LOURIVALDO JOSE FLAVIO COUTINHO VASCONCELOS\"}}}", true);
 
         //tratamento json
-        $parsers = $this->assertivaParser->parse($response);
+        $parsers = $this->assertivaParser->parseData($response);
 
         //tratamento dos cpfs utilizando mascara padrão xxx.xxx.xxx-xx
         //$parsers = $this->formattingCpf($parsers);
 
-        //busca
-        //salvando dados no banco
-        $consultsParser = $this->consultsParser->createConsult($parsers);
-        //list
+        // procura dados no banco
+        $searchConsult = $this->consultsParser->searchConsult($cpf);
+
+        if(empty($searchConsult)){
+            // criar dados no banco
+            $createConsult = $this->consultsParser->createConsult($cpf);
+        }
+        else{
+            // salvando dados no banco
+            $consultsParser = $this->consultsParser->updateConsult($parsers);
+        }
+
 
 
 

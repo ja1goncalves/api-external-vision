@@ -9,10 +9,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AssertivaCpfRequest;
-use GuzzleHttp\Client;
 use App\Services\Service;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
+use function Psy\debug;
 
 /**
  * Class AssertivaController
@@ -20,6 +19,12 @@ use Illuminate\Support\Facades\Log;
  */
 class AssertivaController
 {
+    /**
+     * @var Service
+     */
+    private $service;
+
+
     /**
      * AssertivaController constructor.
      * @param Service $service
@@ -32,20 +37,20 @@ class AssertivaController
     /**
      * @param AssertivaCpfRequest $request
      * @return \Illuminate\Http\JsonResponse
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function findCpf(AssertivaCpfRequest $request)
     {
          try {
-             $cpf = $this->service->validateCpf($request);
+            // valida se cpf é valido
+             $cpf = $this->service->validateCpf($request->get('cpf'));
 
-             if(){
-
+             if(empty($cpf)){
+                 return response()->json(['data' => $cpf]);
              }
-
-
-            $result = $this->service->findCpf($request->get('cpf'));
-
+             else{
+                 // busca dados do cpf informado
+                $result = $this->service->findCpf($request->get('cpf'));
+             }
             return response()->json(['data' => $result]);
 
         } catch (\Exception $e) {

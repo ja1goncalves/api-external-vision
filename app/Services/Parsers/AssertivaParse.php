@@ -40,7 +40,7 @@ class AssertivaParser
      * @param $result
      * @return array|null
      */
-    public function parse($result){
+    public function parseData($result){
 
         $person = null;
 
