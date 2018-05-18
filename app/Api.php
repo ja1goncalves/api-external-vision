@@ -6,6 +6,8 @@
  * Time: 11:43
  */
 
+use Illuminate\Database\Eloquent\Model;
+
 class Api extends Model
 {
     /**

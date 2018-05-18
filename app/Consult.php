@@ -8,6 +8,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Model;
 
 class Consult extends Model
 {
@@ -15,7 +16,7 @@ class Consult extends Model
      * FormatTrait, Método para Validar E Formatar CPF
      *
      */
-    use FormatTrait;
+    //use FormatTrait;
 
     protected $fillable = [
         'protocol',

@@ -2,10 +2,14 @@
 
 namespace App\Services;
 
+use App\Consult;
 use App\Services\Parsers\AssertivaParser;
 use App\Services\Parsers\DataParser;
 use GuzzleHttp\Client;
 use Fideloper\Proxy\TrustProxies as Middleware;
+use Illuminate\Support\Facades\Log;
+use function Psy\debug;
+use App\Services\Parsers\ConsultsParser;
 
 /**
  * Class Service
@@ -18,12 +22,18 @@ class Service
      */
     private $client;
 
+    private $assertivaParser;
+
+    private $consultsParser;
+
     /**
      * Service constructor.
      * @param Client $client
      */
-    public function __construct(Client $client){
+    public function __construct(Client $client, AssertivaParser $assertivaParser,ConsultsParser $consultsParser){
         $this->client = $client;
+        $this->assertivaParser = $assertivaParser;
+        $this->consultsParser = $consultsParser;
     }
 
     /**
@@ -35,51 +45,88 @@ class Service
      */
     public function findCpf($cpf)
     {
+        //acceso á api assertiva
+        $response = $this->accessAssertiva($cpf);
 
-        $cpf = $this->formatCpf($cpf);
+        //exemplos de retorno
+        //$response = json_decode("{\"PF\":{\"DADOS\":{\"SIGNO\":\"TOURO\",\"PROBABILIDADE_OBITO\":0,\"PROTOCOLO\":\"b843c678-bdd4-4f67-ae2b-0ebf6bea13bf\",\"IDADE\":24,\"MAE\":{\"TELEFONES\":{\"TELEFONE\":[81992589969,81988240540]},\"CPF\":16988221468,\"NOME\":\"EDNA SOARES DE SOUZA\"},\"RENDA_ESTIMADA\":1033.92,\"ENDERECOS\":{\"ENDERECO\":{\"BAIRRO\":\"JARDIM SAO PAULO\",\"TIPO_LOGRADOURO\":\"R\",\"COMPLEMENTO\":\"BL 2 AP 2\",\"CEP\":50790901,\"NUMERO\":355,\"LOGRADOURO\":\"LEANDRO BARRETO\",\"UF\":\"PE\",\"CIDADE\":\"RECIFE\"}},\"TELEFONES_MOVEIS\":{\"TELEFONE\":[81992589969,81988240540,\"\",81981546043,\"\",\"\"]},\"SITUACAO_RECEITA_FEDERAL\":{\"DATACONSULTA\":\"\"},\"NOME\":\"LAIS INGRID SOARES DE SOUZA VIDOTO\",\"FAIXA_RENDA_ESTIMADA\":\"E\",\"DATA_NASC\":\"1994-04-25\",\"VALOR_BENEFICIO\":\"Até 2 SM\",\"CPF\":8967701411,\"SEXO\":\"F\"}}}", true);
+        $response = json_decode("{\"PF\":{\"DADOS\":{\"DATA_NASC\":\"1994-01-08\",\"SIGNO\":\"CAPRICÓRNIO\",\"PROBABILIDADE_OBITO\":0,\"MAE\":{\"NOME\":\"MARIA GISELIA MENDES COUTINHO VASCONCELOS\"},\"IDADE\":24,\"PROTOCOLO\":\"fc093348-4f9b-4275-b9c1-8f73cf912db9\",\"ENDERECOS\":{\"ENDERECO\":{\"BAIRRO\":\"TIMBAUBINHA\",\"CEP\":55870000,\"NUMERO\":52,\"LOGRADOURO\":\"VITAL BRASIL\",\"UF\":\"PE\",\"CIDADE\":\"TIMBAUBA\"}},\"CPF\":7082187416,\"TELEFONES_MOVEIS\":{\"TELEFONE\":[\"\",\"\",\"\",\"\",\"\",\"\",\"\"]},\"SEXO\":\"M\",\"SITUACAO_RECEITA_FEDERAL\":{\"DATACONSULTA\":\"\"},\"NOME\":\"LOURIVALDO JOSE FLAVIO COUTINHO VASCONCELOS\"}}}", true);
 
-        if (empty($cpf)){
-            throw new \Exception('Cpf inválido!');
-        } else {
+        //tratamento json
+        $parsers = $this->assertivaParser->parse($response);
 
-            $query = [
-                'empresa'   => config("assertiva.credentials.company"),
-                'usuario'   => config("assertiva.credentials.user"),
-                'senha'     => config("assertiva.credentials.password"),
-                'documento' => $cpf
-            ];
+        //tratamento dos cpfs utilizando mascara padrão xxx.xxx.xxx-xx
+        //$parsers = $this->formattingCpf($parsers);
 
-            /*
-            $res = $this->client->request('GET', config("assertiva.url_cpf"), [
+        //busca
+        //salvando dados no banco
+        $consultsParser = $this->consultsParser->createConsult($parsers);
+        //list
+
+
+
+
+
+
+
+
+            //salvando no banco
+           // $dataParser  = new DataParser();
+           // $dataparsers = $dataParser->searchAlls($parsers);
+
+
+            return $parsers;
+
+    }
+
+    /**
+     * Acesso á Api Assertiva e retorno de dados da mesma
+     *
+     * @param $cpf
+     */
+    public function accessAssertiva($cpf)
+    {
+
+        $query = [
+            'empresa'   => config("assertiva.credentials.company"),
+            'usuario'   => config("assertiva.credentials.user"),
+            'senha'     => config("assertiva.credentials.password"),
+            'documento' => $cpf
+        ];
+
+        /*
+            $response = $this->client->request('GET', config("assertiva.url_cpf"), [
                 'query' => $query,
                 'proxy' => config("assertiva.proxy"),
             ]);
 
-            \Log::info($res->getBody());
-            $json = json_decode($res->getBody(), true);
-            */
+            //\Log::info($response->getBody());
+            $response = json_decode($response->getBody(), true);
+            return $response;
+        */
 
-            //exemplos de retorno
-            $json = json_decode("{\"PF\":{\"DADOS\":{\"SIGNO\":\"TOURO\",\"PROBABILIDADE_OBITO\":0,\"PROTOCOLO\":\"b843c678-bdd4-4f67-ae2b-0ebf6bea13bf\",\"IDADE\":24,\"MAE\":{\"TELEFONES\":{\"TELEFONE\":[81992589969,81988240540]},\"CPF\":16988221468,\"NOME\":\"EDNA SOARES DE SOUZA\"},\"RENDA_ESTIMADA\":1033.92,\"ENDERECOS\":{\"ENDERECO\":{\"BAIRRO\":\"JARDIM SAO PAULO\",\"TIPO_LOGRADOURO\":\"R\",\"COMPLEMENTO\":\"BL 2 AP 2\",\"CEP\":50790901,\"NUMERO\":355,\"LOGRADOURO\":\"LEANDRO BARRETO\",\"UF\":\"PE\",\"CIDADE\":\"RECIFE\"}},\"TELEFONES_MOVEIS\":{\"TELEFONE\":[81992589969,81988240540,\"\",81981546043,\"\",\"\"]},\"SITUACAO_RECEITA_FEDERAL\":{\"DATACONSULTA\":\"\"},\"NOME\":\"LAIS INGRID SOARES DE SOUZA VIDOTO\",\"FAIXA_RENDA_ESTIMADA\":\"E\",\"DATA_NASC\":\"1994-04-25\",\"VALOR_BENEFICIO\":\"Até 2 SM\",\"CPF\":8967701411,\"SEXO\":\"F\"}}}", true);
-            //$json = json_decode("{\"PF\":{\"DADOS\":{\"DATA_NASC\":\"1994-01-08\",\"SIGNO\":\"CAPRICÓRNIO\",\"PROBABILIDADE_OBITO\":0,\"MAE\":{\"NOME\":\"MARIA GISELIA MENDES COUTINHO VASCONCELOS\"},\"IDADE\":24,\"PROTOCOLO\":\"fc093348-4f9b-4275-b9c1-8f73cf912db9\",\"ENDERECOS\":{\"ENDERECO\":{\"BAIRRO\":\"TIMBAUBINHA\",\"CEP\":55870000,\"NUMERO\":52,\"LOGRADOURO\":\"VITAL BRASIL\",\"UF\":\"PE\",\"CIDADE\":\"TIMBAUBA\"}},\"CPF\":7082187416,\"TELEFONES_MOVEIS\":{\"TELEFONE\":[\"\",\"\",\"\",\"\",\"\",\"\",\"\"]},\"SEXO\":\"M\",\"SITUACAO_RECEITA_FEDERAL\":{\"DATACONSULTA\":\"\"},\"NOME\":\"LOURIVALDO JOSE FLAVIO COUTINHO VASCONCELOS\"}}}", true);
-
-            //tratamento json
-            $parser  = new AssertivaParser();
-            $parsers = $parser->parse($json);
-
-            //salvando no banco
-            $dataParser  = new DataParser();
-            $dataparsers = $dataParser->searchAlls($parsers);
+    }
 
 
+    /**
+     * @param array $parsers
+     * @return array
+     */
+    public function formattingCpf(array $parsers)
+    {
+        $pess = $parsers['cpf'];
+        $formatCpf = $this->formatCpf($pess);
+        $parsers['cpf'] = $formatCpf;
 
+        $mother = $parsers['mother']['cpf'];
+        $formatCpfMother = $this->formatCpf($mother);
+        $parsers['mother']['cpf'] = $formatCpfMother;
 
+        $copartner = $parsers['copartner']['cpf'];
+        $formatCpfCopartner = $this->formatCpf($copartner);
+        $parsers['copartner']['cpf'] = $formatCpfCopartner;
 
-
-
-
-            return $parsers;
-        }
+        return $parsers;
     }
 
     /**
@@ -152,10 +199,20 @@ class Service
      */
     public function formatCpf($cpf)
     {
-        if($this->validateCpf($cpf)){
-            if (strlen($cpf) == 14){
+        if (strlen($cpf) == 14){
                 return $cpf;
-            } else{
+        } else{
+            if (strlen($cpf) == 10){
+                $zero = '0'.$cpf;
+                $partOne    = substr($zero, 0, 3);
+                $partTwo    = substr($zero, 3, 3);
+                $partThree  = substr($zero, 6, 3);
+                $partFour   = substr($zero, 9, 2);
+                $mountCPF   = "$partOne.$partTwo.$partThree-$partFour";
+
+                return $mountCPF;
+            }
+            else{
                 $partOne    = substr($cpf, 0, 3);
                 $partTwo    = substr($cpf, 3, 3);
                 $partThree  = substr($cpf, 6, 3);
@@ -164,8 +221,6 @@ class Service
 
                 return $mountCPF;
             }
-        } else {
-            return null;
         }
     }
 

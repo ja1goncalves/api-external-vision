@@ -8,9 +8,30 @@
 
 namespace App\Services\Parsers;
 
+use App\Services\Service;
 
 class DataParser
 {
+    /**
+     * @var Client
+     */
+    private $client;
+
+    /**
+     * @var Service
+     */
+    private $service;
+
+    /**
+     * DataParser constructor.
+     * @param Client $client
+     * @param Service $service
+     */
+    public function __construct(Client $client, Service $service){
+        $this->client = $client;
+        $this->service = $service;
+    }
+
     /**
      * Metodo contem todas as consultas ao banco de dados
      *
@@ -19,46 +40,35 @@ class DataParser
     public function searchAlls($parsers)
     {
         //gravando consulta
-        $consult = $this->searchConsult($parsers);
+        $consultId = $this->searchConsult($parsers);
         //gravando companhia
-        $this->searchCompanie($parsers,$consult);
+        $this->searchCompanie($parsers,$consultId);
         //gravando socios
-        $this->searchCopartner($parsers,$consult);
+        $this->searchCopartner($parsers,$consultId);
         //gravando email
-        $this->searchEmail($parsers,$consult);
+        $this->searchEmail($parsers,$consultId);
         //gravando mae
-        $this->searchMother($parsers,$consult);
+        $this->searchMother($parsers,$consultId);
         //gravando ocupação
-        $this->searchOccupation($parsers,$consult);
+        $this->searchOccupation($parsers,$consultId);
         //gravando enderreço
-        $this->searchStreet($parsers,$consult);
+        $this->searchStreet($parsers,$consultId);
         //gravando veiculos
-        $this->searchVehicles($parsers,$consult);
+        $this->searchVehicles($parsers,$consultId);
     }
 
+
     /**
-     * Esse método salva a primeira consulta e todos telefones na tabela polimorfica
+     * Adiciona um array em um Lista
      *
-     * @param $result
-     * @return mixed
+     * @param array $obj
+     * @return array
      */
-    public function searchConsult($result)
+    public function add($obj = [])
     {
-        $result = $this->sendFormatDb($result);
-
-        if(!$result)
-            return [];
-
-        if ($consult = $this->store($result->PF->DADOS)) {
-            $consultId = $consult->id;
-            if (isset($result->PF->DADOS->TELEFONES_MOVEIS)) {
-                foreach ((array)$result->PF->DADOS->TELEFONES_MOVEIS->TELEFONE as $tel) {
-                    if($tel != '' || !empty($tel))
-                        $consult->phones()->create(['phone' => $tel]);
-                }
-            }
-            return $consultId;
-        }
+        $array = [1 => '0'];
+        $newArray = array_merge($array , $obj);
+        return $newArray;
     }
 
     /**
@@ -74,7 +84,7 @@ class DataParser
 
         $CPF    = $result->PF->DADOS->CPF;
         $string = $this->formatString($CPF);
-        $new    = $this->formatCpf($string);
+        $new    = $this->service->formatCpf($string);
 
         $result->PF->DADOS->CPF = $new;
 
@@ -114,23 +124,76 @@ class DataParser
             $string = $this->add($array);
             return $string;
         } else {
-            $data = $this->formatCpf($cpf);
+            $data = $this->service->formatCpf($cpf);
             return $data;
         }
     }
 
     /**
-     * Adiciona um array em um Lista
+     * Esse método salva a primeira consulta e todos telefones na tabela polimorfica
      *
-     * @param array $obj
-     * @return array
+     * @param $result
+     * @return mixed
      */
-    public function add($obj = [])
+    public function searchConsult($result)
     {
-        $array = [1 => '0'];
-        $newArray = array_merge($array , $obj);
-        return $newArray;
+        $result = $this->sendFormatDb($result);
+
+        if(!$result)
+            return [];
+
+        if ($consult = $this->saveConsult($result->PF->DADOS)) {
+            $consultId = $consult->id;
+            if (isset($result->PF->DADOS->TELEFONES_MOVEIS)) {
+                foreach ((array)$result->PF->DADOS->TELEFONES_MOVEIS->TELEFONE as $tel) {
+                    if($tel != '' || !empty($tel))
+                        $consult->phones()->create(['phone' => $tel]);
+                }
+            }
+            return $consultId;
+        }
     }
+
+
+    /**
+     * Método saveConsult grava no banco de dados seus dados respectivos
+     *
+     * @param $result
+     * @return static
+     */
+    public function saveConsult($result)
+    {
+        $arrayList = null;
+
+        if (isset($result->PROTOCOLO)) {
+            $arrayList['protocol'] = $result->PROTOCOLO;
+        }
+        if (isset($result->CPF)) {
+            $arrayList['cpf'] = $result->CPF;
+        }
+        if (isset($result->NOME)) {
+            $arrayList['name'] = $result->NOME;
+        }
+        if (isset($result->SEXO)) {
+            $arrayList['sex'] = $result->SEXO;
+        }
+        if (isset($result->SIGNO)) {
+            $arrayList['signo_zodiacal'] = $result->SIGNO;
+        }
+        if (isset($result->DATA_NASC)) {
+            $arrayList['date_birth'] = $result->DATA_NASC;
+        }
+        if (isset($result->IDADE)) {
+            $arrayList['age'] = $result->IDADE;
+        }
+        if (isset($result->RENDA_ESTIMADA)) {
+            $arrayList['estimated_income'] = $result->RENDA_ESTIMADA;
+        }
+        if ($consult = $this->create($arrayList)) {
+            return $consult;
+        }
+    }
+
 
     /**
      * Esse método recebe uma request do controller com response da api assertiva
@@ -473,6 +536,7 @@ class DataParser
 
             }
             $this->create($arrayList);
+
         }
 
     }

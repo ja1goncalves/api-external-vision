@@ -37,6 +37,13 @@ class AssertivaController
     public function findCpf(AssertivaCpfRequest $request)
     {
          try {
+             $cpf = $this->service->validateCpf($request);
+
+             if(){
+
+             }
+
+
             $result = $this->service->findCpf($request->get('cpf'));
 
             return response()->json(['data' => $result]);

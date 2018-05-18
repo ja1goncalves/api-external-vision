@@ -4,7 +4,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class CreateApiLogs extends Migration
+class CreateApiLogsTable extends Migration
 {
     /**
      * Run the migrations.
