@@ -59,6 +59,10 @@ class Service
         //tratamento dos cpfs utilizando mascara padrão xxx.xxx.xxx-xx
         //$parsers = $this->formattingCpf($parsers);
 
+
+        /**
+         * Consult
+         */
         // procura dados no banco
         $searchConsult = $this->consultsParser->searchConsult($cpf);
 
@@ -70,6 +74,80 @@ class Service
             // salvando dados no banco
             $consultsParser = $this->consultsParser->updateConsult($parsers);
         }
+
+        /**
+         * Phone
+         */
+        $searchPhone = $this->consultsParser->searchPhone($parsers, $searchConsult);// FALTA TESTAR
+
+        if(empty($searchPhone)){
+            $createPhone = $this->consultsParser->createPhone($parsers,$searchConsult);// FALTA TESTAR
+        }
+        else{
+            $updatePhone = $this->consultsParser->updatePhone($parsers, $searchConsult);// FALTA TESTAR
+        }
+
+        /**
+         * Mother
+         */
+        $searchMother = $this->consultsParser->searchMother($parsers, $searchConsult);// FALTA TESTAR
+
+        if(empty($searchPhone)){
+            $createMother = $this->consultsParser->createMother($parsers,$searchConsult);// FALTA TESTAR
+        }
+        else{
+            $updateMother = $this->consultsParser->updateMother($parsers, $searchConsult);// FALTA TESTAR
+        }
+
+        /**
+         * Street
+         */
+        $searchStreet = $this->consultsParser->searchStreet($parsers, $searchConsult);// FALTA TESTAR
+
+        if(empty($searchPhone)){
+            $createStreet = $this->consultsParser->createStreet($parsers,$searchConsult);// FALTA TESTAR
+        }
+        else{
+            $updateStreet = $this->consultsParser->updateStreet($parsers, $searchConsult);// FALTA TESTAR
+        }
+
+        /**
+         * Email
+         */
+        $searchEmail = $this->consultsParser->searchEmail($parsers, $searchConsult);// FALTA TESTAR
+
+        if(empty($searchPhone)){
+            $createEmail = $this->consultsParser->createEmail($parsers,$searchConsult);// FALTA TESTAR
+        }
+        else{
+            $updateEmail = $this->consultsParser->updateEmail($parsers, $searchConsult);// FALTA TESTAR
+        }
+
+        /**
+         * Occupation
+         */
+        $searchOccupation = $this->consultsParser->searchOccupation($parsers, $searchConsult);// FALTA TESTAR
+
+        if(empty($searchPhone)){
+            $createOccupation = $this->consultsParser->createOccupation($parsers,$searchConsult);// FALTA TESTAR
+        }
+        else{
+            $updateOccupation = $this->consultsParser->updateOccupation($parsers, $searchConsult);// FALTA TESTAR
+        }
+
+        /**
+         * Vehicles
+         */
+        $searchVehicles = $this->consultsParser->searchVehicles($parsers, $searchConsult); // FALTA TESTAR
+
+        if(empty($searchVehicles)){
+            $createVehicles = $this->consultsParser->createVehicles($parsers,$searchConsult);// FALTA TESTAR
+        }
+        else{
+            $updateVehicles = $this->consultsParser->updateVehicles($parsers, $searchConsult);// FALTA TESTAR
+        }
+
+
 
 
 
