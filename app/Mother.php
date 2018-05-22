@@ -15,7 +15,11 @@ class Mother extends Model
     /**
      * @var array
      */
-    protected $fillable = ['name', 'cpf', 'consult_id'];
+    protected $fillable = [
+        'name',
+        'cpf',
+        'consult_id'
+    ];
 
     /**
      * @var string

@@ -53,7 +53,7 @@ class Consult extends Model
     /**
      * Uma pessoa pode ter apenas uma mãe
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function mothers()
     {
