@@ -27,9 +27,9 @@ class CorreiosController extends AppController
      * @return mixed|\Psr\Http\Message\ResponseInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function findCep(Request $request)
+    public function findCep($cep)
     {
-        return $this->cepService->findCep($request->get('cep'));
+        return $this->cepService->findCep($cep);
     }
 
 }

@@ -51,16 +51,16 @@ class ConsultsParser
         return $data;
     }
 
-    public function searchConsult(array $parsers)
+    public function searchConsult($parsers)
     {
-        $consult = Consult::where('cpf',$parsers['cpf'])->first();
+        $consult = Consult::where('cpf',$parsers)->first();
 
         if(empty($consult))
         {
             $data = null;
         }
         else{
-            $data = $consult['id'];
+            $data = $consult;
         }
             return $data;
     }

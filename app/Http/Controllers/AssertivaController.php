@@ -49,7 +49,7 @@ class AssertivaController
              }
              else{
                  // busca dados do cpf informado
-                $result = $this->service->findCpf($request->get('cpf'));
+                $result = $this->service->searchCpf($request->get('cpf'));
              }
             return response()->json(['data' => $result]);
 

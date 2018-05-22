@@ -28,13 +28,13 @@ class ReceitaController
     }
 
     /**
-     * @param Request $request
+     * @param $cnpj
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function findCnpj(Request $request)
+    public function findCnpj($cnpj)
     {
-        return $this->receitaService->findCnpj($request->get('cnpj'));
+        return $this->receitaService->findCnpj($cnpj);
     }
 
 }
