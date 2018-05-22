@@ -89,5 +89,4 @@ class SpcService
             return response()->json(['data'=>'Não foi possível retornar as informações','status'=>false]);
         }
     }
-
 }

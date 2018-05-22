@@ -35,7 +35,9 @@ class ReceitaService
             } else{
                 $url = 'https://www.receitaws.com.br/v1/cnpj/';
                 $cnpj = preg_replace("/[.\/-]/", '', $cnpj);
-                $res = $this->client->request('GET', $url . $cnpj);
+                $endpoint = $url . $cnpj;
+                \Log::debug($endpoint);
+                $res = $this->client->request('GET', $endpoint);
                 $data = json_decode($res->getBody(), true);
 
                 return $data;
