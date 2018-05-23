@@ -39,6 +39,11 @@ class Service
         $this->consultsParser = $consultsParser;
     }
 
+    /**
+     * @param $cpf
+     * @return array|null
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function searchCpf($cpf)
     {
         $cpf = preg_replace('/[^0-9]/', '', (string)$cpf);
@@ -102,13 +107,12 @@ class Service
             'documento' => $cpf
         ];
 
+        $response = $this->client->request('GET', config("assertiva.url_cpf"), [
+            'query' => $query,
+            'proxy' => config("assertiva.proxy"),
+        ]);
 
-            $response = $this->client->request('GET', config("assertiva.url_cpf"), [
-                'query' => $query,
-                'proxy' => config("assertiva.proxy"),
-            ]);
-
-            $response = json_decode($response->getBody(), true);
+        $response = json_decode($response->getBody(), true);
 
         $log_assertiva = new ApiLog();
         $log_assertiva->log('Assertiva', 'Log CPF', 'CPF: ' . $cpf);
@@ -300,7 +304,7 @@ class Service
      * Método converte cpf em string adicionando zero na frente
      *
      * @param $cpf
-     * @return string
+     * @return array|string
      */
     public function formatString($cpf)
     {
