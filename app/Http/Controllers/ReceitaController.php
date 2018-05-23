@@ -8,32 +8,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ReceitaService;
+use App\Services\Service;
 use Illuminate\Http\Request;
 
 class ReceitaController
 {
     /**
-     * @var ReceitaService
+     * @var Service
      */
-    protected $receitaService;
+    protected $service;
 
     /**
      * ReceitaController constructor.
-     * @param ReceitaService $receitaService
+     * @param Service $service
      */
-    public function __construct(ReceitaService $receitaService)
+    public function __construct(Service $service)
     {
-        $this->receitaService = $receitaService;
+        $this->service = $service;
     }
 
     /**
-     * @param $cnpj
+     * @param Request $request
      * @return mixed
      */
-    public function findCnpj($cnpj)
+    public function findCnpj(Request $request)
     {
-        return $this->receitaService->findCnpj($cnpj);
+        return $this->service->findCnpj($request->get('cnpj'));
     }
 
 }

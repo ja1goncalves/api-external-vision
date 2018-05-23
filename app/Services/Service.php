@@ -102,13 +102,13 @@ class Service
             'documento' => $cpf
         ];
 
+
             $response = $this->client->request('GET', config("assertiva.url_cpf"), [
                 'query' => $query,
                 'proxy' => config("assertiva.proxy"),
             ]);
 
             $response = json_decode($response->getBody(), true);
-            return $response;
 
         $log_assertiva = new ApiLog();
         $log_assertiva->log('Assertiva', 'Log CPF', 'CPF: ' . $cpf);
