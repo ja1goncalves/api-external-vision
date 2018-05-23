@@ -11,7 +11,7 @@ namespace App\Http\Controllers;
 use App\Services\Service;
 use Illuminate\Http\Request;
 
-class ReceitaController
+class ReceitaController 
 {
     /**
      * @var Service
