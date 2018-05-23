@@ -30,7 +30,8 @@ class ConsultsParser
             $data = null;
         }
         else{
-            $data = $consult['id'];
+            $consults = Consult::where('cpf',$parsers['cpf'])->get();
+            $data = $consults;
         }
         return $data;
     }
@@ -39,21 +40,22 @@ class ConsultsParser
     {
         $data = $this->dataConsult($parsers);
 
-        $consult = Consult::where('cpf',$parsers['cpf'])->update($data);
+        $consult  = Consult::where('cpf',$parsers['cpf'])->update($data);
 
         if(empty($consult))
         {
             $data = null;
         }
         else{
-            $data = $consult['id'];
+            $consults = Consult::where('cpf',$parsers['cpf'])->get();
+            $data = $consults;
         }
         return $data;
     }
 
     public function searchConsult($parsers)
     {
-        $consult = Consult::where('cpf',$parsers)->first();
+        $consult = Consult::where('cpf',$parsers)->get();
 
         if(empty($consult))
         {
@@ -75,7 +77,7 @@ class ConsultsParser
             'signo_zodiacal'   => $parsers['signo_zodiacal'],
             'date_birth'       => $parsers['date_birth'],
             'age'              => $parsers['age'],
-            'estimated_income' => $parsers['estimated_income'],
+            'estimated_income' => isset($parsers['estimated_income']) ? $parsers['estimated_income'] : 0,
         ];
         return $data;
     }
@@ -85,7 +87,9 @@ class ConsultsParser
      */
     public function searchPhone(array $parsers,$consultId)
     {
-        $phone = Phone::where('consult_id', $consultId)->first();
+        $phone = Phone::where('consult_id', $consultId['id'])->get();
+
+        \Log::debug($phone);
 
         if(empty($phone))
         {
@@ -204,8 +208,8 @@ class ConsultsParser
 
     public function searchMother(array $parsers)
     {
-        $consult = Consult::where('cpf',$parsers['cpf'])->first();
-        $mother  = Mother::where('consult_id',$consult['id'])->first();
+        $consult = Consult::where('cpf',$parsers['cpf'])->get();
+        $mother  = Mother::where('consult_id',$consult['id'])->get();
 
         if(empty($mother))
         {
@@ -266,8 +270,8 @@ class ConsultsParser
 
     public function searchStreet(array $parsers)
     {
-        $consult = Consult::where('cpf',$parsers['cpf'])->first();
-        $street  = Street::where('consult_id',$consult['id'])->first();
+        $consult = Consult::where('cpf',$parsers['cpf'])->get();
+        $street  = Street::where('consult_id',$consult['id'])->get();
 
         if(empty($street))
         {
@@ -335,8 +339,8 @@ class ConsultsParser
 
     public function searchEmail(array $parsers)
     {
-        $consult = Consult::where('cpf',$parsers['cpf'])->first();
-        $email  = Email::where('consult_id',$consult['id'])->first();
+        $consult = Consult::where('cpf',$parsers['cpf'])->get();
+        $email  = Email::where('consult_id',$consult['id'])->get();
 
         if(empty($email))
         {
@@ -397,8 +401,8 @@ class ConsultsParser
 
     public function searchOccupation(array $parsers)
     {
-        $consult     = Consult::where('cpf',$parsers['cpf'])->first();
-        $occupation  = Occupation::where('consult_id',$consult['id'])->first();
+        $consult     = Consult::where('cpf',$parsers['cpf'])->get();
+        $occupation  = Occupation::where('consult_id',$consult['id'])->get();
 
         if(empty($occupation))
         {
@@ -466,8 +470,8 @@ class ConsultsParser
 
     public function searchVehicles(array $parsers)
     {
-        $consult     = Consult::where('cpf',$parsers['cpf'])->first();
-        $vehicles  = Vehicles::where('consult_id',$consult['id'])->first();
+        $consult     = Consult::where('cpf',$parsers['cpf'])->get();
+        $vehicles  = Vehicles::where('consult_id',$consult['id'])->get();
 
         if(empty($vehicles))
         {

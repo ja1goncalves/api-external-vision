@@ -108,7 +108,6 @@ class AssertivaParser
                 $person['mother'] = [
                     'name'   => $result['PF']['DADOS']['MAE']['NOME'] ?? null,
                     'cpf'    => $result['PF']['DADOS']['MAE']['CPF'] ?? null,
-                    //'cpf'    => $ZeroMather ?? null,
                     'phones' => $phones
                 ];
             }
@@ -130,8 +129,6 @@ class AssertivaParser
                 $person['copartner'] = [
                     'name' => $result['PF']['DADOS']['SOCIEDADES']['SOCIEDADE']['SOCIOS']['NOME'] ?? null,
                     'cpf'  => $result['PF']['DADOS']['SOCIEDADES']['SOCIEDADE']['SOCIOS']['CPF'] ?? null,
-                   // 'cpf'  => $ZeroCopartner ?? null,
-
                 ];
             }
 
