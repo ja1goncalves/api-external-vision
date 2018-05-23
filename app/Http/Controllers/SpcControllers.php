@@ -9,11 +9,13 @@
 namespace App\Http\Controllers;
 
 
-use http\Env\Request;
 use App\Services\SpcService;
+use Illuminate\Http\Request;
+use App\Http\Controllers\AppController;
 
-class SpcControllers
+class SpcControllers extends AppController
 {
+    protected $spcService;
 
     /**
      * SpcControllers constructor.

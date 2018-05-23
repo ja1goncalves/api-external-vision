@@ -8,7 +8,11 @@
 
 namespace App\Services;
 
-class SpcService
+//use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Request;
+use App\Http\Controllers\AppController;
+
+class SpcService 
 {
     /**
      * Retorna quantidade de vezes em que a API Assertiva foi utilizada no mês solicitado.
@@ -30,6 +34,7 @@ class SpcService
      */
 
     public function consultSpc(Request $request) {
+
         //$url = "https://servicos.spc.org.br:443/spc/remoting/ws/consulta/consultaWebService?wsdl"; // PRODUÇÃO
         $url = "https://treina.spc.org.br:443/spc/remoting/ws/consulta/consultaWebService?wsdl"; // SANDBOX
 
@@ -38,7 +43,6 @@ class SpcService
                  'password' => '10455423'
                ];
         */
-
         $auth = [ // SANDBOX
             'login' => '398759',
             'password' => '09052018'
@@ -46,6 +50,8 @@ class SpcService
 
         try {
             $client = new \SoapClient($url, array_merge(array('trace' => 1), $auth));
+            \Log::debug($client);
+
             $doc = $request->get('document');
 
             $data = [
