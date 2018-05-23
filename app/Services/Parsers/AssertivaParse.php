@@ -17,8 +17,16 @@ class AssertivaParser
         $result = [];
 
         if(!empty($phoneData['TELEFONE'])){
+            \Log::debug($phoneData['TELEFONE']);
 
             //array_filter->filtra telefones apenas maior ou igual á 8, se estiver vazio desconsidera á listagem
+            if(is_string($phoneData['TELEFONE']) || is_numeric($phoneData['TELEFONE'])){
+                return [
+                    'number' => (string) $phoneData['TELEFONE'],
+                    'type'   => $type
+                ];
+            }
+
             $phones = array_filter($phoneData['TELEFONE'], function ($value){
                 return strlen($value) >= 8;
             });
@@ -26,9 +34,9 @@ class AssertivaParser
             // array_map-> formata no padrão informada abaixo, á informação vinda de $phones.
             $result = array_map(function ($p) use ($type) {
                     return [
-                    'number' => $p,
-                    'type'   => $type
-                ];
+                        'number' => $p,
+                        'type'   => $type
+                    ];
             }, $phones);
         }
         return $result;
