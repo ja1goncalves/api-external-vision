@@ -27,7 +27,8 @@ class DataParser
      * @param Client $client
      * @param Service $service
      */
-    public function __construct(Client $client, Service $service){
+    public function __construct(Client $client,
+                                Service $service){
         $this->client = $client;
         $this->service = $service;
     }
@@ -298,7 +299,7 @@ class DataParser
     {
         // Se StdClass Existe Model Mother è disparado e chama método store e grava dados da mother
         if (isset($result->PF->DADOS->MAE)){
-            $mother = $this->store($result->PF->DADOS->MAE, $consultId);
+            $mother = $this->saveMother($result->PF->DADOS->MAE, $consultId);
             foreach ((array)$result->PF->DADOS->TELEFONES_MOVEIS->TELEFONE as $tel){
                 if($tel != '' || !empty($tel)){
                     $mother->phones()->create(['phone' => $tel]);
@@ -342,7 +343,7 @@ class DataParser
     public function searchOccupation($result, $consultId)
     {
         if (isset($result->PF->DADOS->OCUPACOES->OCUPACAO)) {
-            $this->store($result->PF->DADOS->OCUPACOES->OCUPACAO, $consultId);
+            $this->saveOccupation($result->PF->DADOS->OCUPACOES->OCUPACAO, $consultId);
         }
     }
 

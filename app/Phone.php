@@ -49,7 +49,18 @@ class Phone extends Model
     public function phoneable()
     {
         return $this->morphTo();
+
+        /*
+        return Relation::morphMap([
+            'consult'   => 'App\Consult',
+            'mothers'   => 'App\Mothers',
+            'copartner' => 'App\Copartner',
+        ]);
+        */
     }
+
+
+
 
 
 }

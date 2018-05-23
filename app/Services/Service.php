@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Consult;
+use App\ApiLog;
 use App\Services\Parsers\AssertivaParser;
 use App\Services\Parsers\DataParser;
 use GuzzleHttp\Client;
@@ -30,63 +31,70 @@ class Service
      * Service constructor.
      * @param Client $client
      */
-    public function __construct(Client $client, AssertivaParser $assertivaParser,ConsultsParser $consultsParser){
+    public function __construct(Client $client,
+                                AssertivaParser $assertivaParser,
+                                ConsultsParser $consultsParser){
         $this->client = $client;
         $this->assertivaParser = $assertivaParser;
         $this->consultsParser = $consultsParser;
+    }
+
+    public function searchCpf($cpf)
+    {
+        $cpf = preg_replace('/[^0-9]/', '', (string)$cpf);
+
+        $serch = $this->findCpf($cpf);
+        return $serch;
+
+        /*
+        $searchConsult = $this->consultsParser->searchConsult($cpf);
+
+        if(empty($searchConsult))
+        {
+            $serch = $this->findCpf($cpf);
+            return $serch;
+        }
+        else
+        {
+            //retorna dados da consulta no banco de dados
+            return $searchConsult;
+        }
+        */
     }
 
     /**
      * Pesquisa de informações pessoais pelo Cpf, api assertiva
      *
      * @param $cpf
-     * @return array|null|void
-     * @throws \Exception
+     * @return array|null
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function findCpf($cpf)
     {
-        //acceso á api assertiva
+        //acceso á api assertiva com o seu retorno
         $response = $this->accessAssertiva($cpf);
 
-        //exemplos de retorno
-        //$response = json_decode("{\"PF\":{\"DADOS\":{\"SIGNO\":\"TOURO\",\"PROBABILIDADE_OBITO\":0,\"PROTOCOLO\":\"b843c678-bdd4-4f67-ae2b-0ebf6bea13bf\",\"IDADE\":24,\"MAE\":{\"TELEFONES\":{\"TELEFONE\":[81992589969,81988240540]},\"CPF\":16988221468,\"NOME\":\"EDNA SOARES DE SOUZA\"},\"RENDA_ESTIMADA\":1033.92,\"ENDERECOS\":{\"ENDERECO\":{\"BAIRRO\":\"JARDIM SAO PAULO\",\"TIPO_LOGRADOURO\":\"R\",\"COMPLEMENTO\":\"BL 2 AP 2\",\"CEP\":50790901,\"NUMERO\":355,\"LOGRADOURO\":\"LEANDRO BARRETO\",\"UF\":\"PE\",\"CIDADE\":\"RECIFE\"}},\"TELEFONES_MOVEIS\":{\"TELEFONE\":[81992589969,81988240540,\"\",81981546043,\"\",\"\"]},\"SITUACAO_RECEITA_FEDERAL\":{\"DATACONSULTA\":\"\"},\"NOME\":\"LAIS INGRID SOARES DE SOUZA VIDOTO\",\"FAIXA_RENDA_ESTIMADA\":\"E\",\"DATA_NASC\":\"1994-04-25\",\"VALOR_BENEFICIO\":\"Até 2 SM\",\"CPF\":8967701411,\"SEXO\":\"F\"}}}", true);
-        $response = json_decode("{\"PF\":{\"DADOS\":{\"DATA_NASC\":\"1994-01-08\",\"SIGNO\":\"CAPRICÓRNIO\",\"PROBABILIDADE_OBITO\":0,\"MAE\":{\"NOME\":\"MARIA GISELIA MENDES COUTINHO VASCONCELOS\"},\"IDADE\":24,\"PROTOCOLO\":\"fc093348-4f9b-4275-b9c1-8f73cf912db9\",\"ENDERECOS\":{\"ENDERECO\":{\"BAIRRO\":\"TIMBAUBINHA\",\"CEP\":55870000,\"NUMERO\":52,\"LOGRADOURO\":\"VITAL BRASIL\",\"UF\":\"PE\",\"CIDADE\":\"TIMBAUBA\"}},\"CPF\":7082187416,\"TELEFONES_MOVEIS\":{\"TELEFONE\":[\"\",\"\",\"\",\"\",\"\",\"\",\"\"]},\"SEXO\":\"M\",\"SITUACAO_RECEITA_FEDERAL\":{\"DATACONSULTA\":\"\"},\"NOME\":\"LOURIVALDO JOSE FLAVIO COUTINHO VASCONCELOS\"}}}", true);
+        //verifica se cpf possue 0 na frente
+        $ZeroPerson = $this->formatString($response['PF']['DADOS']['CPF']);
 
         //tratamento json
-        $parsers = $this->assertivaParser->parse($response);
+        $parsers = $this->assertivaParser->parseData($response,$ZeroPerson);
 
-        //tratamento dos cpfs utilizando mascara padrão xxx.xxx.xxx-xx
-        //$parsers = $this->formattingCpf($parsers);
-
-        //busca
-        //salvando dados no banco
-        $consultsParser = $this->consultsParser->createConsult($parsers);
-        //list
-
-
-
-
-
-
-
-
-            //salvando no banco
-           // $dataParser  = new DataParser();
-           // $dataparsers = $dataParser->searchAlls($parsers);
-
-
-            return $parsers;
-
+        //Salvar dados no banco de dados
+       //$this->teste($cpf,$parsers);
+        return $parsers;
     }
+
 
     /**
      * Acesso á Api Assertiva e retorno de dados da mesma
      *
      * @param $cpf
+     * @return mixed|\Psr\Http\Message\ResponseInterface
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function accessAssertiva($cpf)
     {
-
         $query = [
             'empresa'   => config("assertiva.credentials.company"),
             'usuario'   => config("assertiva.credentials.user"),
@@ -94,17 +102,18 @@ class Service
             'documento' => $cpf
         ];
 
-        /*
             $response = $this->client->request('GET', config("assertiva.url_cpf"), [
                 'query' => $query,
                 'proxy' => config("assertiva.proxy"),
             ]);
 
-            //\Log::info($response->getBody());
             $response = json_decode($response->getBody(), true);
             return $response;
-        */
 
+        $log_assertiva = new ApiLog();
+        $log_assertiva->log('Assertiva', 'Log CPF', 'CPF: ' . $cpf);
+
+        return $response;
     }
 
 
@@ -129,37 +138,7 @@ class Service
         return $parsers;
     }
 
-    /**
-     * Monta os parametros da requisição da Assertiva
-     *
-     * @param array $params
-     * @return string
-     */
-    protected function httpQueryBuild(array $params)
-    {
-        $httpQuery = '';
-
-        foreach ($params as $key => $value)
-        {
-            if (!is_array($value))
-            {
-                $httpQuery .= urlencode($key)  .'='. urlencode($value) . '&';
-            } else
-            {
-                foreach ($value as $v2)
-                {
-                    if (!is_array($v2))
-                    {
-                        $httpQuery .= urlencode($key)  .'='. urlencode($v2) . '&';
-                    }
-                }
-            }
-        }
-        $httpQuery = rtrim($httpQuery, '&');
-        return '?' . $httpQuery;
-    }
-
-    /**
+     /**
      * Método Valida Tamanho, Confere Primeiro Digito Verificador, Calcula Segundo dígido Verificador
      *
      * @param $cpf
@@ -285,6 +264,93 @@ class Service
         return $query->where('cpf', $data)
             ->where('updated_at', '>=', new \DateTime('-6 months'))
             ->first();
+    }
+
+    /**
+     * Método para verificar se tem cpf nao tem zero inicial
+     *
+     * @param $cpf
+     * @return array
+     */
+    public function verificarZero($cpf)
+    {
+        if (strlen($cpf) == 10) {
+            $array = str_split($cpf, 1);
+            $string = $this->add($array);
+            return $string;
+        } else {
+            return $cpf;
+        }
+    }
+
+    /**
+     * Adiciona um array em um Lista
+     *
+     * @param array $obj
+     * @return array
+     */
+    public function add($obj = [])
+    {
+        $array = [1 => '0'];
+        $newArray = array_merge($array , $obj);
+        return $newArray;
+    }
+
+    /**
+     * Método converte cpf em string adicionando zero na frente
+     *
+     * @param $cpf
+     * @return string
+     */
+    public function formatString($cpf)
+    {
+        $format = $this->verificarZero($cpf);
+        if (is_array($format)) {
+            $array = $format[0] . $format[1] . $format[2] . $format[3] . $format[4] . $format[5] .
+                     $format[6] . $format[7] .  $format[8] . $format[9] . $format[10];
+            return $array;
+        } else {
+            if (strlen($format) == 11) {
+                return $format;
+            }
+        }
+    }
+
+    public function teste($cpf,$parsers)
+    {
+        /**
+         * Consult
+         */
+        $searchConsult = $this->consultsParser->searchConsult($cpf);
+
+        if(empty($searchConsult)){
+            $createConsult = $this->consultsParser->createConsult($parsers);
+           // $searchPhone   = $this->consultsParser->searchPhone($parsers, $createConsult['id']);// FALTA TESTAR
+
+/*
+            if(empty($searchPhone)){
+                $createPhone = $this->consultsParser->createPhone($parsers,$searchConsult);// FALTA TESTAR
+            }
+            else{
+                $updatePhone = $this->consultsParser->updatePhone($parsers, $searchConsult);// FALTA TESTAR
+            }
+*/
+        }
+        else{
+            $consultsParser = $this->consultsParser->updateConsult($parsers);
+            \Log::debug($consultsParser['protocol']);
+            $searchPhone = $this->consultsParser->searchPhone($parsers, $consultsParser['id']);// FALTA TESTAR
+
+/*
+            if(empty($searchPhone)){
+                $createPhone = $this->consultsParser->createPhone($parsers,$searchConsult);// FALTA TESTAR
+            }
+            else{
+                $updatePhone = $this->consultsParser->updatePhone($parsers, $searchConsult);// FALTA TESTAR
+            }
+*/
+        }
+
     }
 
 }

@@ -40,7 +40,7 @@ class AssertivaParser
      * @param $result
      * @return array|null
      */
-    public function parse($result){
+    public function parseData($result,$ZeroPerson ){
 
         $person = null;
 
@@ -49,6 +49,15 @@ class AssertivaParser
             $phones = [];
             if(!empty($result['PF']['DADOS']['TELEFONES_MOVEIS'])){
                 $phones = array_values($this->parsePhones($result['PF']['DADOS']['TELEFONES_MOVEIS']));
+            }
+
+            if(empty($ZeroPerson))
+            {
+                $cpf = $result['PF']['DADOS']['CPF'];
+            }
+            else
+            {
+                $cpf = $ZeroPerson;
             }
 
             $person = [
@@ -61,7 +70,8 @@ class AssertivaParser
                 'estimated_income' => $result['PF']['DADOS']['RENDA_ESTIMADA'] ?? null,
                 'date_birth'       => $result['PF']['DADOS']['DATA_NASC'] ?? null,
                 'benefit_value'    => $result['PF']['DADOS']['VALOR_BENEFICIO'] ?? null,
-                'cpf'              => $result['PF']['DADOS']['CPF'] ?? null,
+                //'cpf'              => $result['PF']['DADOS']['CPF'] ?? null,
+                'cpf'              => $cpf ?? null,
                 'sex'              => $result['PF']['DADOS']['SEXO'] ?? null,
                 'phones'           => $phones,
             ];

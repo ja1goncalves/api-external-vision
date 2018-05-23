@@ -10,7 +10,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Street  extends Model
+class Street extends Model
 {
     /**
      * Variavel $aux recebe objeto de criação do método Store de sua Instância
