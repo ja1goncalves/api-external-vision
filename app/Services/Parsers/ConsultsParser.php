@@ -73,8 +73,8 @@ class ConsultsParser
             'protocol'         => $parsers['protocol'],
             'cpf'              => $parsers['cpf'],
             'name'             => $parsers['name'],
-            'sex'              => $parsers['sex'],
-            'signo_zodiacal'   => $parsers['signo_zodiacal'],
+            'sex'              => $parsers['gender'],
+            'signo_zodiacal'   => $parsers['zodiac_sign'],
             'date_birth'       => $parsers['date_birth'],
             'age'              => $parsers['age'],
             'estimated_income' => isset($parsers['estimated_income']) ? $parsers['estimated_income'] : 0,
@@ -284,15 +284,15 @@ class ConsultsParser
     public function dataStreet(array $parsers, $consultId)
     {
         $data = [
-            'type_street'  => $parsers['street']['type_street'],
-            'public_place' => $parsers['street']['public_place'],
-            'number'       => $parsers['street']['number'],
-            'complement'   => $parsers['street']['complement'],
-            'neighborhood' => $parsers['street']['neighborhood'],
-            'city'         => $parsers['street']['city'],
-            'uf'           => $parsers['street']['uf'],
-            'zipcode'      => $parsers['street']['zipcode'],
-            'score'        => $parsers['street']['score'],
+            'type_street'  => $parsers['addresses']['type_street'],
+            'public_place' => $parsers['addresses']['public_place'],
+            'number'       => $parsers['addresses']['number'],
+            'complement'   => $parsers['addresses']['complement'],
+            'neighborhood' => $parsers['addresses']['neighborhood'],
+            'city'         => $parsers['addresses']['city'],
+            'uf'           => $parsers['addresses']['uf'],
+            'zipcode'      => $parsers['addresses']['zipcode'],
+            'score'        => $parsers['addresses']['score'],
             'consult_id'   => $consultId
         ];
         return $data;
