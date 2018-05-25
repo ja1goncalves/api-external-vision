@@ -89,8 +89,6 @@ class ConsultsParser
     {
         $phone = Phone::where('consult_id', $consultId['id'])->get();
 
-        \Log::debug($phone);
-
         if(empty($phone))
         {
             $data = null;

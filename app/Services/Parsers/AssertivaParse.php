@@ -17,26 +17,28 @@ class AssertivaParser
         $result = [];
 
         if(!empty($phoneData['TELEFONE'])){
-            \Log::debug($phoneData['TELEFONE']);
 
             //array_filter->filtra telefones apenas maior ou igual á 8, se estiver vazio desconsidera á listagem
             if(is_string($phoneData['TELEFONE']) || is_numeric($phoneData['TELEFONE'])){
-                return [
+                $result = [
                     'number' => (string) $phoneData['TELEFONE'],
                     'type'   => $type
                 ];
+                return $result;
             }
 
             $phones = array_filter($phoneData['TELEFONE'], function ($value){
-                return strlen($value) >= 8;
+
+                $result = strlen($value) >= 8;
+                return $result;
             });
 
             // array_map-> formata no padrão informada abaixo, á informação vinda de $phones.
             $result = array_map(function ($p) use ($type) {
-                    return [
-                        'number' => $p,
-                        'type'   => $type
-                    ];
+                return [
+                    'number' => $p,
+                    'type'   => $type
+                ];
             }, $phones);
         }
         return $result;
@@ -110,7 +112,15 @@ class AssertivaParser
 
                 $phones = [];
                 if(!empty($result['PF']['DADOS']['MAE']['TELEFONES'])){
-                    $phones = array_values($this->parsePhones($result['PF']['DADOS']['MAE']['TELEFONES']));
+
+                    $test = $this->parsePhones($result['PF']['DADOS']['MAE']['TELEFONES']);
+                    if(count($test) == 2){
+                        $phones = $test;
+                    }
+                    if(count($test) >= 3){
+                        //$phones = array_values($this->parsePhones($result['PF']['DADOS']['MAE']['TELEFONES']));
+                        $phones = array_values($test);
+                    }
                 }
 
                 $person['mother'] = [

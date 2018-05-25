@@ -50,7 +50,6 @@ class SpcService
 
         try {
             $client = new \SoapClient($url, array_merge(array('trace' => 1), $auth));
-            \Log::debug($client);
 
             $doc = $request->get('document');
 

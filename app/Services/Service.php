@@ -342,7 +342,6 @@ class Service
         }
         else{
             $consultsParser = $this->consultsParser->updateConsult($parsers);
-            \Log::debug($consultsParser['protocol']);
             $searchPhone = $this->consultsParser->searchPhone($parsers, $consultsParser['id']);// FALTA TESTAR
 
 /*
