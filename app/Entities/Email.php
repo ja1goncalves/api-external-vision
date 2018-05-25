@@ -20,6 +20,9 @@ class Email extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'email',
+        'consult_id'
+    ];
 
 }

@@ -20,6 +20,10 @@ class Mother extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'name',
+        'cpf',
+        'consult_id'
+    ];
 
 }

@@ -15,7 +15,11 @@ class Copartner extends Model
     /**
      * @var array
      */
-    protected $fillable = ['cpf', 'name', 'companie_id'];
+    protected $fillable = [
+        'cpf', 
+        'name', 
+        'companie_id'
+    ];
 
     /**
      * @var string

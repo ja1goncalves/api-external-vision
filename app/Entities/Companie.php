@@ -20,6 +20,14 @@ class Companie extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = ['cnpj',
+        'corporate',
+        'cnae',
+        'description_cnae',
+        'participation',
+        'date_entry',
+        'consult_id'
+    ]
+    ;
 
 }

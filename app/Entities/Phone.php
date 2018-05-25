@@ -20,6 +20,11 @@ class Phone extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'phone',
+        'consult_id',
+        'phoneable_id',
+        'phoneable_type'
+    ];
 
 }

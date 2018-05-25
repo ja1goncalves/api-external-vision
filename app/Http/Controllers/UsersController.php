@@ -198,7 +198,7 @@ class UsersController extends Controller
                 'deleted' => $deleted,
             ]);
         }
-
+        
         return redirect()->back()->with('message', 'User deleted.');
     }
 }

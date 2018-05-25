@@ -20,6 +20,17 @@ class Street extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'type_street',
+        'public_place',
+        'number',
+        'complement',
+        'neighborhood',
+        'city',
+        'uf',
+        'zipcode',
+        'score',
+        'consult_id'
+    ];
 
 }

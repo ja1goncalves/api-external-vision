@@ -20,6 +20,12 @@ class Vehicles extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'board',
+        'brand_model',
+        'manufacturing_year',
+        'model_year',
+        'consult_id'
+    ];
 
 }

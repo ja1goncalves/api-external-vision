@@ -20,6 +20,15 @@ class Consult extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'protocol',
+        'cpf',
+        'name',
+        'sex',
+        'signo_zodiacal',
+        'date_birth',
+        'age',
+        'estimated_income'
+    ];
 
 }

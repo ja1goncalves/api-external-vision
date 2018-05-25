@@ -20,6 +20,17 @@ class Occupation extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'code',
+        'description',
+        'cnpj',
+        'corporate',
+        'cnae',
+        'description_cnae',
+        'postage',
+        'salary',
+        'salary_range',
+        'consult_id'
+    ];
 
 }

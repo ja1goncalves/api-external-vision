@@ -20,6 +20,10 @@ class Copartner extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'cpf',
+        'name',
+        'companie_id'
+    ];
 
 }
