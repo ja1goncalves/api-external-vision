@@ -23,6 +23,7 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
+<<<<<<< HEAD
         $this->app->bind(\App\Repositories\UserRepository::class, \App\Repositories\UserRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\ApiLogRepository::class, \App\Repositories\ApiLogRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\CompanieRepository::class, \App\Repositories\CompanieRepositoryEloquent::class);
@@ -34,6 +35,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\PhoneRepository::class, \App\Repositories\PhoneRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\StreetRepository::class, \App\Repositories\StreetRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\VehiclesRepository::class, \App\Repositories\VehiclesRepositoryEloquent::class);
+=======
+
+
+        $this->app->bind(\App\Repositories\AddressRepository::class, \App\Repositories\AddressRepositoryEloquent::class);
+>>>>>>> a9ec3c8ca69ac6ca15ce12ca20f3bc742ba897cf
         //:end-bindings:
     }
 }

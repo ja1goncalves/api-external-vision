@@ -19,7 +19,7 @@ class SpcControllers extends AppController
 
     /**
      * SpcControllers constructor.
-     * @param SpcService $service
+     * @param SpcService $spcService
      */
     public function __construct(SpcService $spcService)
     {
@@ -27,10 +27,8 @@ class SpcControllers extends AppController
     }
 
     /**
-     * Consulta de
-     *
-     * @param Request $request
-     * @return mixed
+     * @param $spc
+     * @return string
      */
     public function consultCpfOrCnpj($spc)
     {

@@ -23,7 +23,7 @@ class CorreiosController extends AppController
     }
 
     /**
-     * @param Request $request
+     * @param $cep
      * @return mixed|\Psr\Http\Message\ResponseInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
      */

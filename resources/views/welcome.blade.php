@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>API Vision</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -13,8 +13,8 @@
         <!-- Styles -->
         <style>
             html, body {
-                background-color: #fff;
-                color: #636b6f;
+                background-color: #FAF8DD;
+                color: #000;
                 font-family: 'Raleway', sans-serif;
                 font-weight: 100;
                 height: 100vh;
@@ -66,28 +66,22 @@
     </head>
     <body>
         <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
-                    @endauth
-                </div>
-            @endif
-
             <div class="content">
+
+                <div class="sub-title m-b-md">
+                    <a href="https://mangue3.com/"><img  width="300px;" src="https://scontent.frec5-1.fna.fbcdn.net/v/t1.0-9/33825151_1535795706543250_7894449025930231808_n.jpg?_nc_cat=0&_nc_eui2=AeH4QcXEeUzVhb166BXayYpExrTfKYSR68g5PBomAUDMIIU0JQAA_rlymYDXjaN0AsOydOt_2sr7VZ1M0U8zE9ShlylWEtxz3vJ-sFOBMGC2KQ&oh=589921e6f9a717591a5b11e5daae8b89&oe=5B890811" alt=""></a>
+                </div>
+
                 <div class="title m-b-md">
-                    Laravel
+                    Mangue3 </br>
+                    2018 </br>
+                </div>
+
+                <div class="sub-title m-b-md">
+                    v<strong>1.0</strong>
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
                 </div>
             </div>
         </div>

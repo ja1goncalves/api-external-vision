@@ -34,9 +34,11 @@ class AssertivaController
         $this->service = $service;
     }
 
+
     /**
      * @param AssertivaCpfRequest $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function findCpf(AssertivaCpfRequest $request)
     {

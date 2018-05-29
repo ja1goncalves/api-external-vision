@@ -11,6 +11,10 @@
         "laravel/framework": "5.5.*",
         "laravel/passport": "~4.0",
         "laravel/tinker": "~1.0",
+<<<<<<< HEAD
+=======
+        "league/fractal": "^0.13.0",
+>>>>>>> a9ec3c8ca69ac6ca15ce12ca20f3bc742ba897cf
         "laravellegends/pt-br-validator": "5.1.*",
         "prettus/l5-repository": "^2.6"
     },
