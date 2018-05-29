@@ -27,7 +27,14 @@ class Companie extends Model implements Transformable
         'participation',
         'date_entry',
         'consult_id'
-    ]
-    ;
+    ];
+
+    //se precisar ocultar alguma informação colocar no hidden
+    
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
 }
