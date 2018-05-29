@@ -45,11 +45,12 @@ class SpcService
         */
         $auth = [ // SANDBOX
             'login' => '398759',
-            'password' => '09052018'
+            'password' => '09052018',
+            'trace' => 1
         ];
 
         try {
-            $client = new \SoapClient($url, array_merge(array('trace' => 1), $auth));
+            $client = new \SoapClient($url, $auth);
 
             $doc = $request->get('document');
 

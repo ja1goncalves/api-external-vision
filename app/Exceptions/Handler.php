@@ -4,6 +4,9 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Prettus\Validator\Exceptions\ValidatorException;
+use Symfony\Component\HttpFoundation\Response;
+
 
 class Handler extends ExceptionHandler
 {
@@ -48,13 +51,17 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        //return parent::render($request, $exception);
-
-        if($exception instanceof AppException){
+        if ($exception instanceof ValidatorException) {
+            return response()->json([
+                'error'   => true,
+                'message' => $exception->getMessageBag()
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }else if($exception instanceof AppException){
             return response()->json([
                 'error'   => true,
                 'message' => $exception->getMessage()
             ], $exception->getCode());
-        }        return parent::render($request, $exception);
+        }
+        return parent::render($request, $exception);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Presenters\AddressPresenter;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\AddressRepository;
@@ -13,8 +14,32 @@ use App\Validators\AddressValidator;
  *
  * @package namespace App\Repositories;
  */
-class AddressRepositoryEloquent extends BaseRepository implements AddressRepository
+class AddressRepositoryEloquent extends AppRepository implements AddressRepository
 {
+    /**
+     * @var array
+     */
+    protected $fieldSearchable = [
+        'id'              ,
+        'zip_code' => 'ilike',
+        'country'  => 'ilike',
+        'state'    => 'ilike',
+        'city'     => 'ilike',
+        'district' => 'ilike',
+        'street'   => 'ilike',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $fieldsRules = [
+        'id'       => ['numeric', 'max:2147483647'],
+        'zip_code' => ['max:1000'],
+        'state'    => ['max:4'],
+        'city'     => ['max:50'],
+        'district' => ['max:100'],
+        'street'   => ['max:100'],
+    ];
     /**
      * Specify Model class name
      *
@@ -38,11 +63,11 @@ class AddressRepositoryEloquent extends BaseRepository implements AddressReposit
 
 
     /**
-     * Boot up the repository, pushing criteria
+     * @return mixed
      */
-    public function boot()
+    public function presenter()
     {
-        $this->pushCriteria(app(RequestCriteria::class));
+        return AddressPresenter::class;
     }
     
 }

@@ -9,7 +9,8 @@ use App\Services\Parsers\DataParser;
 use GuzzleHttp\Client;
 use Fideloper\Proxy\TrustProxies as Middleware;
 use Illuminate\Support\Facades\Log;
-use function Psy\debug;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Services\Parsers\ConsultsParser;
 
 /**
@@ -320,40 +321,47 @@ class Service
         }
     }
 
-    public function teste($cpf,$parsers)
+
+    /**
+     * @param bool $object
+     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     */
+    public static function getUser($object = false)
     {
-        /**
-         * Consult
-         */
-        $searchConsult = $this->consultsParser->searchConsult($cpf);
 
-        if(empty($searchConsult)){
-            $createConsult = $this->consultsParser->createConsult($parsers);
-           // $searchPhone   = $this->consultsParser->searchPhone($parsers, $createConsult['id']);// FALTA TESTAR
-
-/*
-            if(empty($searchPhone)){
-                $createPhone = $this->consultsParser->createPhone($parsers,$searchConsult);// FALTA TESTAR
-            }
-            else{
-                $updatePhone = $this->consultsParser->updatePhone($parsers, $searchConsult);// FALTA TESTAR
-            }
-*/
+        if ($object) {
+            return Auth::user();
+        } else {
+            $user = Auth::user();
+            return $user->email;
         }
-        else{
-            $consultsParser = $this->consultsParser->updateConsult($parsers);
-            $searchPhone = $this->consultsParser->searchPhone($parsers, $consultsParser['id']);// FALTA TESTAR
+    }
+    /**
+     * @return mixed
+     */
+    public static function logout()
+    {
+        $user = self::getUser(true);
+        $accessToken = DB::table('oauth_access_tokens')
+            ->where('user_id', '=', $user->id)
+            ->latest()->get();
 
-/*
-            if(empty($searchPhone)){
-                $createPhone = $this->consultsParser->createPhone($parsers,$searchConsult);// FALTA TESTAR
-            }
-            else{
-                $updatePhone = $this->consultsParser->updatePhone($parsers, $searchConsult);// FALTA TESTAR
-            }
-*/
+        return DB::table('oauth_access_tokens')
+            ->where('id', '=', $accessToken[0]->id)
+            ->delete();
+
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function authorizationUser($id = false)
+    {
+        $user = Auth::user();
+        if ($id) {
+            return $user->id;
         }
-
+        return $user->email;
     }
 
 }
