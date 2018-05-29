@@ -26,7 +26,7 @@ class CreateAddressesTable extends Migration
 			$table->string('complement', 300)->nullable();
 			$table->integer('number')->nullable();
 
-			$table->integer('addressable_id');
+			$table->integer('addressable_id')->default(0);
 			$table->string('addressable_type',20);
 
 			$table->timestamps();
