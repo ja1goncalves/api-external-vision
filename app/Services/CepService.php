@@ -8,24 +8,10 @@
 
 namespace App\Services;
 
-use GuzzleHttp\Client;
+use App\AppHelper;
 
 class CepService
 {
-
-    /**
-     * @var Client
-     */
-    private $client;
-
-    /**
-     * Service constructor.
-     * @param Client $client
-     */
-    public function __construct(Client $client){
-        $this->client = $client;
-    }
-
     /**
      * Busca de Enderreço via cep, api viacep
      *
@@ -39,9 +25,9 @@ class CepService
             if (empty($cep) or is_null($cep)){
                 throw new \Exception('Cep inválido!');
             } else {
-                $url = 'https://viacep.com.br/ws/';
-                $cep = preg_replace("/[.\/-]/", '', $cep);
-                $res = $this->client->request('GET', $url.$cep . '/json/');
+                $url = config("acess.urls.cep");
+                $cep = AppHelper::removeCharacters($cep);
+                $res = PersonService::getInstance()->request('GET', $url.$cep . '/json/');
                 $json = json_decode($res->getBody(), true);
 
                 return $json;

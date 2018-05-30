@@ -35,21 +35,14 @@ class SpcService
 
     public function consultSpc(Request $request) {
 
-        //$url = "https://servicos.spc.org.br:443/spc/remoting/ws/consulta/consultaWebService?wsdl"; // PRODUÇÃO
-        $url = "https://treina.spc.org.br:443/spc/remoting/ws/consulta/consultaWebService?wsdl"; // SANDBOX
-
-        /*$auth = [ // PRODUÇÃO
-                  'login' => '1577427',
-                 'password' => '10455423'
-               ];
-        */
-        $auth = [ // SANDBOX
-            'login' => '398759',
-            'password' => '09052018',
-            'trace' => 1
-        ];
-
         try {
+            $url  = config('acess.urls.treinamento');
+            $auth = [
+                'login'    => config('acess.auth_treinamento.login'),
+                'password' => config('acess.auth_treinamento.password'),
+                'trace'    => config('acess.auth_treinamento.trace'),
+            ];
+
             $client = new \SoapClient($url, $auth);
 
             $doc = $request->get('document');

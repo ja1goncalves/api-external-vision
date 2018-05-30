@@ -4,10 +4,22 @@ namespace App;
 
 /**
  * Class Helper
- * @package App
+ * @package AppformatCpf
  */
 class AppHelper
 {
+    /**
+     * @param $string
+     * @return null|string|string[]
+     */
+    public static function removeCharacters($string) {
+        return preg_replace('/[.\/-]/', '', $string);
+    }
+
+    public static function removeSpecificCharacters($string) {
+        return preg_replace('/[^0-9]/', '', $string);
+    }
+
     /**
      * @param $string
      * @return mixed

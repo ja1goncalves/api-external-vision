@@ -6,7 +6,7 @@ use App\Http\Controllers\AppController;
 use App\Services\CepService;
 use Illuminate\Http\Request;
 
-class CorreiosController extends AppController
+class CepController extends AppController
 {
     /**
      * @var CepService
@@ -14,7 +14,7 @@ class CorreiosController extends AppController
     protected $cepService;
 
     /**
-     * CorreiosController constructor.
+     * CepController constructor.
      * @param CepService $cepService
      */
     public function __construct(CepService $cepService)
