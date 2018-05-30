@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
+
 use App\Validators\AddressValidator;
 use App\Http\Controllers\Traits\CrudMethods;
 use App\Services\AddressService;
+use App\Http\Requests\AddressCreateRequestuse\Illuminate\Http\Request;
 
 /**
  * Class AddressesController.
@@ -35,5 +36,11 @@ class AddressesController extends AppController
     {
         $this->service   = $service;
         $this->validator = $validator;
+    }
+
+
+    public function store(AddressCreateRequest $request)
+    {
+
     }
 }

@@ -16,7 +16,8 @@ class ReceitaController
     /**
      * @var ReceitaService
      */
-    protected $receitaService;
+    protected $receitaService; $log = new ApiLog();
+            $log->log('SPC', 'New SPC Mix Mais', 'Document: ' . $doc);
 
     /**
      * ReceitaController constructor.

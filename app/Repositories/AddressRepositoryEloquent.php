@@ -21,12 +21,12 @@ class AddressRepositoryEloquent extends AppRepository implements AddressReposito
      */
     protected $fieldSearchable = [
         'id'              ,
-        'zip_code' => 'ilike',
-        'country'  => 'ilike',
-        'state'    => 'ilike',
-        'city'     => 'ilike',
-        'district' => 'ilike',
-        'street'   => 'ilike',
+        'zip_code' => 'like',
+        'country'  => 'like',
+        'state'    => 'like',
+        'city'     => 'like',
+        'district' => 'like',
+        'street'   => 'like',
     ];
 
     /**
