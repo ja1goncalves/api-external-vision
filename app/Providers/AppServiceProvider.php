@@ -13,13 +13,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        /**
+        /*
         return Relation::morphMap([
             'consult'   => 'App\Consult',
             'mothers'   => 'App\Mothers',
             'copartner' => 'App\Copartner',
         ]);
-         * */
+        */
     }
 
     /**

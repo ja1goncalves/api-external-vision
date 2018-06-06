@@ -21,13 +21,13 @@ class PersonRepositoryEloquent extends BaseRepository implements PersonRepositor
      */
     protected $fieldSearchable = [
         'id'              ,
-        'protocol' => 'like',
-        'cpf'  => 'like',
-        'name'    => 'like',
-        'sex'     => 'like',
-        'signo_zodiacal' => 'like',
-        'date_birth'   => 'like',
-        'age'   => 'like',
+        'protocol'           => 'like',
+        'cpf'                => 'like',
+        'name'               => 'like',
+        'sex'                => 'like',
+        'signo_zodiacal'     => 'like',
+        'date_birth'         => 'like',
+        'age'                => 'like',
         'estimated_income'   => 'like',
     ];
 
@@ -35,13 +35,13 @@ class PersonRepositoryEloquent extends BaseRepository implements PersonRepositor
      * @var array
      */
     protected $fieldsRules = [
-        'id'       => ['numeric', 'max:2147483647'],
-        'protocol' => ['max:1000'],
-        'cpf'    => ['max:4'],
-        'name'     => ['max:50'],
-        'sex' => ['max:100'],
-        'signo_zodiacal'   => ['max:100'],
-        'age'   => ['max:100'],
+        'id'                => ['numeric', 'max:2147483647'],
+        'protocol'          => ['max:1000'],
+        'cpf'               => ['max:4'],
+        'name'              => ['max:50'],
+        'sex'                 => ['max:100'],
+        'signo_zodiacal'     => ['max:100'],
+        'age'                => ['max:100'],
         'estimated_income'   => ['max:100'],
     ];
 

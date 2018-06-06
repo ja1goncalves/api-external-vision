@@ -20,4 +20,8 @@ Route::middleware(['auth:api'])->group(function ()
     Route::get('/cnpj/{cnpj}',            'ReceitaController@findCnpj');
     Route::get('/spc/consulta',           'SpcControllers@consultCpfOrCnpj');
     Route::get('/assertiva',              'AssertivaController@findCpf');
+
+    Route::resource('addresses', 'AddressesController');
+
 });
+

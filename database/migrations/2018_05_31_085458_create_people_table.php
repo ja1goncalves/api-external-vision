@@ -16,17 +16,17 @@ class CreatePeopleTable extends Migration
 	public function up()
 	{
 		Schema::create('people', function(Blueprint $table) {
-			$table->increments('id');
-			$table->string('protocol');
-			$table->string('cpf')->unique();
-			$table->string('name');
-			$table->char('sex');
-			$table->string('signo_zodiacal');
-			$table->date('date_birth');
-			$table->string('age');
-			$table->string('estimated_income');
+            $table->increments('id');
+            $table->string('protocol', 34);
+			$table->string('cpf', 11)->unique();
+			$table->string('name', 150);
+			$table->char('sex', 1);
+			$table->string('signo_zodiacal', 11);
+			$table->date('date_birth', 8)->nullable();
+			$table->string('age', 2);
+			$table->double('estimated_income', 8,2)->default(0);
 
-			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 

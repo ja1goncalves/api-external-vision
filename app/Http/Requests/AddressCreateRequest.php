@@ -23,8 +23,9 @@ class AddressCreateRequest extends FormRequest
      */
     public function rules()
     {
+        //validação de campos para criação
         return [
-            //
+            'zip_code' => ['required']
         ];
     }
 }
