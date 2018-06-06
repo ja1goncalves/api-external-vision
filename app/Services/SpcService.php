@@ -61,8 +61,8 @@ class SpcService
             ];
 
             $consultData = $client->consultDataSpc($data);
-            $log = new ApiLog();
-            $log->log('SPC', 'New SPC Mix Mais', 'Document: ' . $doc);
+             $log = new ApiLog();
+             $log->log('SPC', 'New SPC Mix Mais', 'Document: ' . $doc);
 
             return json_encode($consultData);
 

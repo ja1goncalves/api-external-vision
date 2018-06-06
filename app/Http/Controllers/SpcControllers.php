@@ -27,12 +27,12 @@ class SpcControllers extends AppController
     }
 
     /**
-     * @param $spc
+     * @param Request $request
      * @return string
      */
-    public function consultCpfOrCnpj($spc)
+    public function consultCpfOrCnpj(Request $request)
     {
-        return $this->spcService->consultSpc($spc);
+        return $this->spcService->consultSpc($request);
     }
 
 
