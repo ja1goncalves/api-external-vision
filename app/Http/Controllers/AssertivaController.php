@@ -37,23 +37,14 @@ class AssertivaController
 
     /**
      * @param AssertivaCpfRequest $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return mixed
      */
     public function findCpf(AssertivaCpfRequest $request)
     {
          try {
-            // valida se cpf é valido
-             $cpf = $this->service->validateCpf($request->get('cpf'));
+            if(!$this->service->validateCpf($request->get('cpf'))) throw new \Exception("CPF invalido!");
 
-             if(empty($cpf)){
-                 return response()->json(['data' => $cpf]);
-             }
-             else{
-                 // busca dados do cpf informado
-                $result = $this->service->searchCpf($request->get('cpf'));
-             }
-            return response()->json(['data' => $result]);
+            return response()->json(['data' => $this->service->searchCpf($request->get('cpf'))]);
 
         } catch (\Exception $e) {
             return response()->json(['error' => true, 'message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);

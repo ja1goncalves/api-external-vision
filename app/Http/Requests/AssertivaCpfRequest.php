@@ -24,7 +24,7 @@ class AssertivaCpfRequest extends FormRequest
     public function rules()
     {
         return [
-            'cpf' => 'required|cpf'
+            'cpf' => 'required'
         ];
     }
 }

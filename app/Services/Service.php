@@ -115,9 +115,6 @@ class Service
 
         $response = json_decode($response->getBody(), true);
 
-        $log_assertiva = new ApiLog();
-        $log_assertiva->log('Assertiva', 'Log CPF', 'CPF: ' . $cpf);
-
         return $response;
     }
 
