@@ -43,7 +43,6 @@ class AssertivaController
     {
          try {
             if(!$this->service->validateCpf($request->get('cpf'))) throw new \Exception("CPF invalido!");
-
             return response()->json(['data' => $this->service->searchCpf($request->get('cpf'))]);
 
         } catch (\Exception $e) {

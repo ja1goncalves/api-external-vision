@@ -8,6 +8,7 @@ use App\Services\Parsers\AssertivaParser;
 use App\Services\Parsers\DataParser;
 use GuzzleHttp\Client;
 use Fideloper\Proxy\TrustProxies as Middleware;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -42,54 +43,20 @@ class Service
 
     /**
      * @param $cpf
-     * @return array|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return mixed
      */
     public function searchCpf($cpf)
     {
-        $cpf = preg_replace('/[^0-9]/', '', (string)$cpf);
-
-        $serch = $this->findCpf($cpf);
-        return $serch;
-
-        /*
-        $searchConsult = $this->consultsParser->searchConsult($cpf);
-
-        if(empty($searchConsult))
-        {
-            $serch = $this->findCpf($cpf);
-            return $serch;
-        }
-        else
-        {
-            //retorna dados da consulta no banco de dados
-            return $searchConsult;
-        }
-        */
+        return Cache::remember($cpf, 43200, function ($cpf) {
+            $response = $this->accessAssertiva($cpf);
+            \Log::debug('entrou');
+            $ZeroPerson = $this->formatString($response['PF']['DADOS']['CPF']);
+            $parsers = $this->assertivaParser->parseData($response,$ZeroPerson);
+            return $parsers;
+        });
+        
     }
 
-    /**
-     * Pesquisa de informações pessoais pelo Cpf, api assertiva
-     *
-     * @param $cpf
-     * @return array|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function findCpf($cpf)
-    {
-        //acceso á api assertiva com o seu retorno
-        $response = $this->accessAssertiva($cpf);
-
-        //verifica se cpf possue 0 na frente
-        $ZeroPerson = $this->formatString($response['PF']['DADOS']['CPF']);
-
-        //tratamento json
-        $parsers = $this->assertivaParser->parseData($response,$ZeroPerson);
-
-        //Salvar dados no banco de dados
-       //$this->teste($cpf,$parsers);
-        return $parsers;
-    }
 
 
     /**
@@ -205,68 +172,6 @@ class Service
         }
     }
 
-    /**
-     * Pegar consulta se CPF existe na base dados
-     *
-     * @param $query
-     * @param $cpf
-     * @return mixed
-     */
-    public function scopeCpf($query, $cpf)
-    {
-        return $query->where('cpf', $cpf);
-    }
-
-    /**
-     * Pegar consulta se CPF existe na base dados
-     *
-     * @param $data
-     * @return mixed
-     */
-    public function getCpf($data)
-    {
-        $earliestdate = DB::table('consults')
-            ->select('*')
-            ->where(['cpf' => $data])->first();
-        if ($earliestdate) {
-            $data = (object)$earliestdate;
-            return $data;
-        }
-    }
-
-    /**
-     * Verifica se dados cadastrados existem a mais de meses e retorna sua entidade
-     *
-     * @param $data
-     * @return mixed
-     */
-    public function getMonths($data)
-    {
-        $mostDate = DB::table('consults')
-            ->select('*')
-            ->where('cpf', '=', $data)
-            ->where('updated_at', '>=', new \DateTime('-6 months'))
-            ->first();
-        if ($mostDate) {
-            return $mostDate;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Verifica se dados cadastrados existem a mais de meses e retorna sua entidade
-     *
-     * @param $query
-     * @param $data
-     * @return mixed
-     */
-    public function scopeMonths($query, $data)
-    {
-        return $query->where('cpf', $data)
-            ->where('updated_at', '>=', new \DateTime('-6 months'))
-            ->first();
-    }
 
     /**
      * Método para verificar se tem cpf nao tem zero inicial
