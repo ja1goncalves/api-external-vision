@@ -47,9 +47,8 @@ class Service
      */
     public function searchCpf($cpf)
     {
-        $response = Cache::remember($cpf, 43200, function ($cpf) {
+        $response = Cache::remember($cpf, 43200, function () use ($cpf) {
             $response = $this->accessAssertiva($cpf);
-            \Log::debug('entrou');
             $ZeroPerson = $this->formatString($response['PF']['DADOS']['CPF']);
             $parsers = $this->assertivaParser->parseData($response,$ZeroPerson);
             return $parsers;
