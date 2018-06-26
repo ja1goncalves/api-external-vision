@@ -51,5 +51,17 @@ class CepService
         }
     }
 
+    public function validarCep($cep) {
+        // retira espacos em branco
+        $cep = trim($cep);
+
+        if(!preg_match('/^[0-9]{5,5}([- ]?[0-9]{3,3})?$/', $cep)) {
+            return false; //CEP inválido
+        }
+        else{
+            return true;//CEP valido
+        }
+    }
+
 
 }

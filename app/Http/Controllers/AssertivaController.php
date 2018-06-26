@@ -1,17 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: laisvidoto
- * Date: 02/05/18
- * Time: 11:44
- */
 
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AssertivaCpfRequest;
 use App\Services\Service;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class AssertivaController

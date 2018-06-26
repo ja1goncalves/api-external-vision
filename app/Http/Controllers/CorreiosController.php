@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\AppController;
 use App\Services\CepService;
-use Illuminate\Http\Request;
+use App\Http\Requests\CorreiosCepRequest;
+use Illuminate\Http\Response;
 
 class CorreiosController extends AppController
 {
@@ -23,13 +23,18 @@ class CorreiosController extends AppController
     }
 
     /**
-     * @param $cep
-     * @return mixed|\Psr\Http\Message\ResponseInterface
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @param CorreiosCepRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function findCep($cep)
+    public function findCep(CorreiosCepRequest $request)
     {
-        return $this->cepService->findCep($cep);
+        try {
+            if(!$this->CepService->validarCep($request->get('cep'))) throw new \Exception("CEP invalido!");
+            return response()->json(['data' => $this->CepService->findCep($request->get('cep'))]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => true, 'message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
     }
 
 }

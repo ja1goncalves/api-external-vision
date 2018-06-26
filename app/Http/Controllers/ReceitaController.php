@@ -1,23 +1,17 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: laisvidoto
- * Date: 27/04/18
- * Time: 11:11
- */
 
 namespace App\Http\Controllers;
 
 use App\Services\ReceitaService;
-use Illuminate\Http\Request;
+use App\Http\Requests\ReceitaCnpjRequest;
+use Illuminate\Http\Response;
 
 class ReceitaController
 {
     /**
      * @var ReceitaService
      */
-    protected $receitaService; //$log = new ApiLog();
-            //$log->log('SPC', 'New SPC Mix Mais', 'Document: ' . $doc);
+    protected $receitaService;
 
     /**
      * ReceitaController constructor.
@@ -29,13 +23,19 @@ class ReceitaController
     }
 
     /**
-     * @param $cnpj
-     * @return mixed
+     * @param ReceitaCnpjRequest $request
+     * @return \Illuminate\Http\JsonResponse
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function findCnpj($cnpj)
+    public function findCnpj(ReceitaCnpjRequest $request)
     {
-        return $this->receitaService->findCnpj($cnpj);
+        try {
+            if(!$this->receitaService->validateCnpj($request->get('cnpj'))) throw new \Exception("CNPJ invalido!");
+            return response()->json(['data' => $this->receitaService->findCnpj($request->get('cnpj'))]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => true, 'message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
     }
 
 }
