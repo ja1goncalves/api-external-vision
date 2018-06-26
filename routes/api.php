@@ -21,7 +21,8 @@ Route::middleware(['auth:api'])->group(function ()
     Route::get('/spc/consulta',           'SpcControllers@consultCpfOrCnpj');
     Route::get('/assertiva',              'AssertivaController@findCpf');
 
-    Route::resource('addresses', 'AddressesController');
+
+    Route::resource('addresses','AddressesController', ['except'=>['create','edit']]);
 
 });
 
