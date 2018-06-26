@@ -33,10 +33,9 @@ class ReceitaService
             if (empty($cnpj) or is_null($cnpj)){
                 throw new \Exception('Cnpj inválido!');
             } else{
-                $url = 'https://www.receitaws.com.br/v1/cnpj/';
-                $cnpj = preg_replace("/[.\/-]/", '', $cnpj);
-                $endpoint = $url . $cnpj;
-                $res = $this->client->request('GET', $endpoint);
+                $cnpj = AppHelper::removeCharacters($cnpj);
+                $url = config("acess.urls.cnpj");
+                $res = PersonService::getInstance()->request('GET', $url.$cnpj);
                 $data = json_decode($res->getBody(), true);
 
                 return $data;

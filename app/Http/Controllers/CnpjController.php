@@ -6,7 +6,7 @@ use App\Services\ReceitaService;
 use App\Http\Requests\ReceitaCnpjRequest;
 use Illuminate\Http\Response;
 
-class ReceitaController
+class CnpjController
 {
     /**
      * @var ReceitaService

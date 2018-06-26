@@ -10,7 +10,7 @@ use Illuminate\Http\Response;
  * Class AssertivaController
  * @package App\Http\Controllers
  */
-class AssertivaController
+class PersonController
 {
     /**
      * @var Service

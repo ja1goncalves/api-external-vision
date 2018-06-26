@@ -68,15 +68,15 @@ class Service
     public function accessAssertiva($cpf)
     {
         $query = [
-            'empresa'   => config("assertiva.credentials.company"),
-            'usuario'   => config("assertiva.credentials.user"),
-            'senha'     => config("assertiva.credentials.password"),
+            'empresa'   => config("acess.credentials.company"),
+            'usuario'   => config("acess.credentials.user"),
+            'senha'     => config("acess.credentials.password"),
             'documento' => $cpf
         ];
 
-        $response = $this->client->request('GET', config("assertiva.url_cpf"), [
+        $response = $this->client->request('GET', config("acess.urls.cpf"), [
             'query' => $query,
-            'proxy' => config("assertiva.proxy"),
+            'proxy' => config("acess.proxy"),
         ]);
 
         $response = json_decode($response->getBody(), true);

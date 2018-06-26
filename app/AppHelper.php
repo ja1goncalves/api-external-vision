@@ -137,4 +137,20 @@ class AppHelper
     {
         return preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $date);
     }
+
+    /**
+     * @param $string
+     * @return null|string|string[]
+     */
+     public static function removeCharacters($string) {
+           return preg_replace('/[.\/-]/', '', $string);
+    }
+
+    /**
+     * @param $string
+     * @return null|string|string[]
+     */
+    public static function removeSpecificCharacters($string) {
+           return preg_replace('/[^0-9]/', '', $string);
+    }
 }
