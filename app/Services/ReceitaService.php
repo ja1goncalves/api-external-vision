@@ -2,22 +2,18 @@
 
 namespace App\Services;
 
-use GuzzleHttp\Client;
-
+/**
+ * Class ReceitaService
+ * @package App\Services
+ */
 class ReceitaService
 {
 
     /**
-     * @var Client
+     * ReceitaService constructor.
      */
-    private $client;
+    public function __construct(){
 
-    /**
-     * Service constructor.
-     * @param Client $client
-     */
-    public function __construct(Client $client){
-        $this->client = $client;
     }
 
     /**
@@ -36,7 +32,7 @@ class ReceitaService
                 $url = 'https://www.receitaws.com.br/v1/cnpj/';
                 $cnpj = preg_replace("/[.\/-]/", '', $cnpj);
                 $endpoint = $url . $cnpj;
-                $res = $this->client->request('GET', $endpoint);
+                $res = Service::httpClient()->request('GET', $endpoint);
                 $data = json_decode($res->getBody(), true);
 
                 return $data;

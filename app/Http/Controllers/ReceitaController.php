@@ -1,23 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: laisvidoto
- * Date: 27/04/18
- * Time: 11:11
- */
 
 namespace App\Http\Controllers;
 
 use App\Services\ReceitaService;
-use Illuminate\Http\Request;
 
+/**
+ * Class ReceitaController
+ * @package App\Http\Controllers
+ */
 class ReceitaController
 {
     /**
      * @var ReceitaService
      */
-    protected $receitaService; //$log = new ApiLog();
-            //$log->log('SPC', 'New SPC Mix Mais', 'Document: ' . $doc);
+    protected $receitaService;
+
 
     /**
      * ReceitaController constructor.
