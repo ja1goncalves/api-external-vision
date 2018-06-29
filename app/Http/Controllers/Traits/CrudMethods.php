@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Traits;
 
 use Illuminate\Http\Request;
 use Prettus\Validator\Contracts\ValidatorInterface;
-
 use App\Services\AppService;
 
 /**
@@ -43,6 +42,7 @@ trait CrudMethods
     /**
      * @param Request $request
      * @return mixed
+     * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function store(Request $request)
     {
@@ -53,8 +53,9 @@ trait CrudMethods
 
     /**
      * @param Request $request
-     * @param $id
+     * @param int $id
      * @return mixed
+     * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function update(Request $request, int $id)
     {
