@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: laisvidoto
- * Date: 02/05/18
- * Time: 11:44
- */
 
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AssertivaCpfRequest;
-use App\Services\Service;
+use App\Services\PersonService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
@@ -20,16 +14,16 @@ use Illuminate\Support\Facades\Log;
 class AssertivaController
 {
     /**
-     * @var Service
+     * @var PersonService
      */
     private $service;
 
 
     /**
      * AssertivaController constructor.
-     * @param Service $service
+     * @param PersonService $service
      */
-    public function __construct(Service $service)
+    public function __construct(PersonService $service)
     {
         $this->service = $service;
     }
