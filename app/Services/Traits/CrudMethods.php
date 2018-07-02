@@ -3,7 +3,7 @@
 namespace App\Services\Traits;
 
 use Prettus\Repository\Contracts\RepositoryInterface;
-
+use Prettus\Validator\Contracts\ValidatorInterface;
 /**
  * Class CrudMethods
  * @package app\Services\Traits
@@ -13,16 +13,14 @@ trait CrudMethods
     /** @var  RepositoryInterface $repository */
     protected $repository;
 
+    /** @var  ValidatorInterface $validator */
+    protected $validator;
     /**
      * @param int $limit
      * @return mixed
      */
     public function all(int $limit = 20)
     {
-//        $this->repository
-//            ->resetCriteria()
-//            ->pushCriteria(app('App\Criterias\FilterByStatusCriteria'))
-//            ->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
         return $this->repository->paginate($limit);
     }
 
@@ -56,6 +54,9 @@ trait CrudMethods
      */
     public function update(array $data, $id)
     {
+        if($this->validator){
+            $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_UPDATE);
+        }
         return $this->repository->update($data, $id);
     }
 

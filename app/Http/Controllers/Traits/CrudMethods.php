@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Traits;
 
+use App\Http\Requests\CreateRequest;
 use Illuminate\Http\Request;
 use Prettus\Validator\Contracts\ValidatorInterface;
 
@@ -41,13 +42,11 @@ trait CrudMethods
     }
 
     /**
-     * @param Request $request
+     * @param CreateRequest $request
      * @return mixed
      */
-    public function store(Request $request)
+    public function store(CreateRequest $request)
     {
-        $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
         return $this->service->create($request->all());
     }
 
@@ -58,8 +57,6 @@ trait CrudMethods
      */
     public function update(Request $request, int $id)
     {
-        $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
         return $this->service->update($request->all(), $id);
     }
 }

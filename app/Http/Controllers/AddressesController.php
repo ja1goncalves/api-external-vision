@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 
-use App\Validators\AddressValidator;
+use App\Http\Requests\AddressCreateRequest;
 use App\Http\Controllers\Traits\CrudMethods;
 use App\Services\AddressService;
-use App\Http\Requests\AddressCreateRequestuse\Illuminate\Http\Request;
 
 /**
  * Class AddressesController.
@@ -22,25 +21,17 @@ class AddressesController extends AppController
      */
     protected $service;
 
-    /**
-     * @var AddressValidator
-     */
-    protected $validator;
+    
+    protected $createRequest = AddressCreateRequest::class;
 
     /**
      * AddressesController constructor.
      * @param AddressService $service
-     * @param AddressValidator $validator
      */
-    public function __construct(AddressService $service, AddressValidator $validator)
+    public function __construct(AddressService $service)
     {
+        parent::__construct();
         $this->service   = $service;
-        $this->validator = $validator;
     }
 
-
-    public function store(AddressCreateRequest $request)
-    {
-
-    }
 }

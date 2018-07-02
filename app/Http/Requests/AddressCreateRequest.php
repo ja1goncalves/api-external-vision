@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddressCreateRequest extends FormRequest
+class AddressCreateRequest extends FormRequest implements CreateRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class AddressCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+          
         ];
     }
 }
