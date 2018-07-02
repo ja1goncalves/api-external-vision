@@ -42,10 +42,10 @@ trait CrudMethods
     }
 
     /**
-     * @param CreateRequest $request
+     * @param Request $request
      * @return mixed
      */
-    public function store(CreateRequest $request)
+    public function store(Request $request)
     {
         return $this->service->create($request->all());
     }

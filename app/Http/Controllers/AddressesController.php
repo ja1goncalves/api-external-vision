@@ -30,7 +30,6 @@ class AddressesController extends AppController
      */
     public function __construct(AddressService $service)
     {
-        parent::__construct();
         $this->service   = $service;
     }
 

@@ -43,7 +43,7 @@ class CepService
                 $cep = preg_replace("/[.\/-]/", '', $cep);
                 $res = $this->client->request('GET', $url.$cep . '/json/');
                 $response = json_decode($res->getBody(), true);
-
+                \Log::debug($response);
                 if(empty($response)){
                     if (!$response) {
                         throw new \Exception('Invalid response');
