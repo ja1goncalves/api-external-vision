@@ -18,7 +18,6 @@ class CorreiosController extends AppController
      */
     public function __construct(CepService $cepService)
     {
-        parent::__construct();
         $this->cepService = $cepService;
     }
 
