@@ -42,9 +42,28 @@ class CepService
                 $url = 'https://viacep.com.br/ws/';
                 $cep = preg_replace("/[.\/-]/", '', $cep);
                 $res = $this->client->request('GET', $url.$cep . '/json/');
-                $json = json_decode($res->getBody(), true);
+                $response = json_decode($res->getBody(), true);
 
-                return $json;
+                if(empty($response)){
+                    if (!$response) {
+                        throw new \Exception('Invalid response');
+                    }else{
+                        throw new \Exception("CEP Inválido!");
+                    }
+                }
+
+                if(isset($response->erro) && $response->erro){
+                    throw new \Exception("CEP não encontrado!");
+                }
+
+                return [
+                    'zip_code'    => $cep,
+                    'street'      => $response->logradouro,
+                    'district'    => $response->bairro,
+                    'city'        => $response->localidade,
+                    'uf'          => $response->uf,
+                    'street_view' => 'maps.google.co.in/maps?q='.$cep
+                ];
             }
         } catch (\Exception $e) {
             return response()->json(['error' => true, 'message' => $e->getMessage()], 401);

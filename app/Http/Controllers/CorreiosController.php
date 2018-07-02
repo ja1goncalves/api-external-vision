@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\AppController;
 use App\Services\CepService;
-use Illuminate\Http\Request;
 
 class CorreiosController extends AppController
 {
@@ -19,6 +18,7 @@ class CorreiosController extends AppController
      */
     public function __construct(CepService $cepService)
     {
+        parent::__construct();
         $this->cepService = $cepService;
     }
 
