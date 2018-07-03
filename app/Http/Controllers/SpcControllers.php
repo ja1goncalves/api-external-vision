@@ -9,21 +9,22 @@
 namespace App\Http\Controllers;
 
 
+use App\Services\SpcConsultService;
 use App\Services\SpcService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppController;
 
 class SpcControllers extends AppController
 {
-    protected $spcService;
+    protected $spcConsultService;
 
     /**
      * SpcControllers constructor.
      * @param SpcService $spcService
      */
-    public function __construct(SpcService $spcService)
+    public function __construct(SpcConsultService $spcConsultService)
     {
-        $this->spcService = $spcService;
+        $this->spcConsultService = $spcConsultService;
     }
 
     /**
@@ -32,7 +33,7 @@ class SpcControllers extends AppController
      */
     public function consultCpfOrCnpj(Request $request)
     {
-        return $this->spcService->consultSpc($request);
+        return $this->spcConsultService->consultSpc($request->get('document-consumer'));
     }
 
 

@@ -13,7 +13,8 @@
         "laravel/tinker": "~1.0",
         "laravellegends/pt-br-validator": "5.1.*",
         "league/fractal": "^0.13.0",
-        "prettus/l5-repository": "^2.6"
+        "prettus/l5-repository": "^2.6",
+        "spatie/array-to-xml": "^2.7"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

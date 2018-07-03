@@ -1,5 +1,8 @@
 <?php
 
+
+Route::post('spc/consulta','SpcControllers@consultCpfOrCnpj');
+
 Route::group(['middleware' => ['auth:api']], function () {
     
     Route::get('/cep/{cep}',    'CorreiosController@findCep');
