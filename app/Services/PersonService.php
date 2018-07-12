@@ -36,20 +36,20 @@ class PersonService extends AppService
         $this->assertivaParser = $assertivaParser;
     }
 
-//time 172800
+
     /**
      * @param $cpf
      * @return mixed
      */
     public function searchCpf($cpf)
     {
-//        $response = Cache::remember($cpf, 1, function () use ($cpf) {
+        $response = Cache::remember($cpf, 172800, function () use ($cpf) {
             $response = $this->accessAssertiva($cpf);
             $ZeroPerson = $this->formatString($response['PF']['DADOS']['CPF']);
             $parsers = $this->assertivaParser->parseData($response,$ZeroPerson);
             return $parsers;
-//        });
-//        return $response;
+        });
+        return $response;
     }
 
 
