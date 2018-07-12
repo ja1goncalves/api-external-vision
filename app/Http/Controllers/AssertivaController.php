@@ -33,7 +33,7 @@ class AssertivaController
      * @param AssertivaCpfRequest $request
      * @return mixed
      */
-    public function findCpf(AssertivaCpfRequest $request)
+    public function findCpf(AssertivaCpfRequest $request, $cpf)
     {
          try {
             if(!$this->service->validateCpf($request->get('cpf'))) throw new \Exception("CPF invalido!");
