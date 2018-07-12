@@ -37,7 +37,19 @@ class AssertivaController
     {
          try {
             if(!$this->service->validateCpf($request->get('cpf'))) throw new \Exception("CPF invalido!");
-            return response()->json(['data' => $this->service->searchCpf($request->get('cpf'))]);
+             $result = $this->service->searchCpf($request->get('cpf'));
+             $person = [
+                 'cpf'       => $result['cpf'],
+                 'birthday'  => $result['date_birth'],
+                 'name'      => $result['name'],
+                 'age'       => $result['age'],
+                 'gender'    => $result['gender'],
+                 'emails'    => $result['email'],
+                 'phones'    => $result['phones'],
+                 'parents'   => $result['mother'],
+                 'addresses' => $result['addresses'],
+             ];
+            return response()->json(['data' => $person]);
 
         } catch (\Exception $e) {
             return response()->json(['error' => true, 'message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
