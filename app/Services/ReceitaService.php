@@ -34,8 +34,28 @@ class ReceitaService
                 $endpoint = $url . $cnpj;
                 $res = Service::httpClient()->request('GET', $endpoint);
                 $data = json_decode($res->getBody(), true);
-
-                return $data;
+                return [
+                    'cnpj'            => $cnpj,
+                    'created'         => $data->abertura,
+                    'status'          => $data->situacao,
+                    'status_date'     => $data->data_situacao,
+                    'name'            => $data->nome,
+                    'email'           => $data->email,
+                    'phone'           => $data->telefone,
+                    'associates'      => $data->qsa,
+                    'activities'      => $data->atividades_secundarias,
+                    'activity'        => $data->atividade_principal,
+                    'share_capital'   => $data->capital_social,
+                    'address'     => [
+                        'zip_code'    => $data->cep,
+                        'number'      => $data->numero,
+                        'street'      => $data->logradouro,
+                        'district'    => $data->bairro,
+                        'city'        => $data->municipio,
+                        'uf'          => $data->uf,
+                        'complement'  => $data->complemento
+                    ],
+                ];
             }
         } catch (\Exception $e){
             return response()->json(['error' => true, 'message' => $e->getMessage()], 401);
