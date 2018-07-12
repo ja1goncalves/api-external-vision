@@ -34,6 +34,7 @@ class ReceitaService
                 $endpoint = $url . $cnpj;
                 $res = Service::httpClient()->request('GET', $endpoint);
                 $data = json_decode($res->getBody(), true);
+                $data =(object) $data;
                 return [
                     'cnpj'            => $cnpj,
                     'created'         => $data->abertura,
