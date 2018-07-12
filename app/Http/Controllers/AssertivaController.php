@@ -36,7 +36,7 @@ class AssertivaController
     public function findCpf(AssertivaCpfRequest $request, $cpf)
     {
          try {
-            if(!$this->service->validateCpf($request->get('cpf'))) throw new \Exception("CPF invalido!");
+            if(!$this->service->validateCpf($cpf)) throw new \Exception("CPF invalido!");
              $result = $this->service->searchCpf($request->get('cpf'));
              $person = [
                  'cpf'       => $result['cpf'],
