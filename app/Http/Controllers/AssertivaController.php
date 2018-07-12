@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AssertivaCpfRequest;
 use App\Services\PersonService;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class AssertivaController
@@ -30,10 +28,10 @@ class AssertivaController
 
 
     /**
-     * @param AssertivaCpfRequest $request
+     * @param $cpf
      * @return mixed
      */
-    public function findCpf(AssertivaCpfRequest $request, $cpf)
+    public function findCpf($cpf)
     {
          try {
             if(!$this->service->validateCpf($cpf)) throw new \Exception("CPF invalido!");
