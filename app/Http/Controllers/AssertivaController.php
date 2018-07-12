@@ -37,7 +37,7 @@ class AssertivaController
     {
          try {
             if(!$this->service->validateCpf($cpf)) throw new \Exception("CPF invalido!");
-             $result = $this->service->searchCpf($request->get('cpf'));
+             $result = $this->service->searchCpf($cpf);
              $person = [
                  'cpf'       => $result['cpf'],
                  'birthday'  => $result['date_birth'],
