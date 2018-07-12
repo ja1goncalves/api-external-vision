@@ -32,7 +32,7 @@ class ReceitaController
      */
     public function findCnpj($cnpj)
     {
-        return $this->receitaService->findCnpj($cnpj);
+        return response()->json(['data' => $this->receitaService->findCnpj($cnpj)]);
     }
 
 }
