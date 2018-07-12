@@ -126,13 +126,13 @@ class AssertivaParser
 
                     $person['addresses'][] = [
                         'type_street'  => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['TIPO_LOGRADOURO'] ?? null,
-                        'public_place' => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['LOGRADOURO'] ?? null,
+                        'street'       => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['LOGRADOURO'] ?? null,
                         'number'       => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['NUMERO'] ?? null,
                         'complement'   => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['COMPLEMENTO'] ?? null,
-                        'neighborhood' => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['BAIRRO'] ?? null,
+                        'district'     => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['BAIRRO'] ?? null,
                         'city'         => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['CIDADE'] ?? null,
                         'uf'           => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['UF'] ?? null,
-                        'zipcode'      => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['CEP'] ?? null,
+                        'zip_code'     => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['CEP'] ?? null,
                         'score'        => $result['PF']['DADOS']['ENDERECOS']['ENDERECO']['SCORE'] ?? null,
                     ];
                 }
