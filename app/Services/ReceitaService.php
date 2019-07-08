@@ -64,7 +64,7 @@ class ReceitaService
                 'line' => $e->getLine(),
                 'file' => $e->getFile(),
                 'message' => $e->getMessage(),
-            ], 401);
+            ], 400);
         }
     }
 
