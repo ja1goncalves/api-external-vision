@@ -59,7 +59,12 @@ class ReceitaService
                 ];
             }
         } catch (\Exception $e){
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 401);
+            return response()->json([
+                'error' => true,
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+                'message' => $e->getMessage(),
+            ], 401);
         }
     }
 
